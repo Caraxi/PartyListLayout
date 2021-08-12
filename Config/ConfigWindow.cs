@@ -184,6 +184,7 @@ namespace PartyListLayout.Config {
                 ImGui.SetCursorPos(p);
 
                 c |= ImGui.Checkbox("Preview", ref Config.PreviewMode);
+                if (ImGui.IsItemHovered()) ImGui.SetTooltip("Party list must not be hidden for preview to work.\nEither join a party or disable 'Hide party list when solo' in the character config.");
                 ImGui.SameLine();
                 ImGui.Dummy(new Vector2(30, ImGui.GetItemRectSize().Y) * ImGui.GetIO().FontGlobalScale);
 
@@ -278,8 +279,8 @@ namespace PartyListLayout.Config {
                         ElementConfigEditor("HP Number", Config.CurrentLayout.NumberHP, LayoutConfig.Default.NumberHP, ref c);
                         ElementConfigEditor("MP Bar", Config.CurrentLayout.BarMP, LayoutConfig.Default.BarMP, ref c);
                         ElementConfigEditor("MP Number", Config.CurrentLayout.NumberMP, LayoutConfig.Default.NumberMP, ref c);
-                        ElementConfigEditor("Oversheild Bar", Config.CurrentLayout.BarOvershield, LayoutConfig.Default.BarOvershield, ref c);
-                        ElementConfigEditor("Oversheild Icon", Config.CurrentLayout.IconOvershield, LayoutConfig.Default.IconOvershield, ref c);
+                        ElementConfigEditor("Overshield Bar", Config.CurrentLayout.BarOvershield, LayoutConfig.Default.BarOvershield, ref c);
+                        ElementConfigEditor("Overshield Icon", Config.CurrentLayout.IconOvershield, LayoutConfig.Default.IconOvershield, ref c);
                         ElementConfigEditor("Chocobo Timer", Config.CurrentLayout.ChocoboTimer, LayoutConfig.Default.ChocoboTimer, ref c);
                         ElementConfigEditor("Chocobo Timer Clock Icon", Config.CurrentLayout.ChocoboTimerClockIcon, LayoutConfig.Default.ChocoboTimerClockIcon, ref c);
                         ElementConfigEditor("Castbar", Config.CurrentLayout.Castbar, LayoutConfig.Default.Castbar, ref c);
