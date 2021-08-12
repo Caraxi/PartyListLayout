@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyListLayout", "PartyListLayout.csproj", "{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{19A35A4C-BB27-4509-8871-4758FAD51CDA} = {19A35A4C-BB27-4509-8871-4758FAD51CDA}
+		{3DBAEE68-9D94-4807-BCB1-E42EDD52B489} = {3DBAEE68-9D94-4807-BCB1-E42EDD52B489}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs", "lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj", "{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Common", "lib\FFXIVClientStructs\FFXIVClientStructs.Common\FFXIVClientStructs.Common.csproj", "{DFE09922-8967-4638-A9BE-8898CD1B22EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Generators", "lib\FFXIVClientStructs\FFXIVClientStructs.Generators\FFXIVClientStructs.Generators.csproj", "{AD042D86-973F-4C89-A764-DCD32E3D5ECD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		DebugNet5|Any CPU = DebugNet5|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
+		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
+		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
+		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
+		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0D4B5D1-85BF-47B6-AA76-5DF082E66E87}
+	EndGlobalSection
+EndGlobal
