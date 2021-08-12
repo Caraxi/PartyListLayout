@@ -87,7 +87,7 @@ namespace PartyListLayout.Config {
                 ImGui.PushStyleColor(ImGuiCol.Button, 0xAA00FFFF);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, 0xCC00FFFF);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, 0xEE00FFFF);
-                if (ImGui.SmallButton("Default")) {
+                if (ImGui.SmallButton($"Default##{uid++}")) {
                     var d = JsonConvert.SerializeObject(defaultCfg);
                     var o = JsonConvert.DeserializeObject(d, eCfg.GetType());
 
