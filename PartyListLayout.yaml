@@ -3,3 +3,4 @@ author: Caraxi
 description: |-
   Customize the layout of the party list.
 repo_url: https://github.com/Caraxi/PartyListLayout
+dalamud_api_level: 3
