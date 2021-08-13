@@ -18,19 +18,19 @@ namespace PartyListLayout.Config {
         [LayoutElement(LayoutElementTab.MemberSlot, "Class Icon", 2)]
         public ElementConfig ClassIcon = new();
 
-        [LayoutElement(LayoutElementTab.MemberSlot, "HP Bar", 3)]
+        [LayoutElement(LayoutElementTab.MemberSlot, "HP Bar", 3, LayoutElementFlags.CanTint)]
         public ElementConfig BarHP = new();
 
         [LayoutElement(LayoutElementTab.MemberSlot, "HP Number", 4)]
         public TextElementConfig NumberHP = new() { Color = new Vector4(1), Glow = new Vector4(0x31/255f, 0x61/255f, 0x86/255f, 0xFF/255f)};
 
-        [LayoutElement(LayoutElementTab.MemberSlot, "MP Bar", 5)]
+        [LayoutElement(LayoutElementTab.MemberSlot, "MP Bar", 5, LayoutElementFlags.CanTint)]
         public ElementConfig BarMP = new();
 
         [LayoutElement(LayoutElementTab.MemberSlot, "MP Number", 6)]
         public TextElementConfig NumberMP = new() { Color = new Vector4(1), Glow = new Vector4(0x31/255f, 0x61/255f, 0x86/255f, 0xFF/255f)};
 
-        [LayoutElement(LayoutElementTab.MemberSlot, "Overshield Bar", 7)]
+        [LayoutElement(LayoutElementTab.MemberSlot, "Overshield Bar", 7, LayoutElementFlags.CanTint)]
         public ElementConfig BarOvershield = new();
 
         [LayoutElement(LayoutElementTab.MemberSlot, "Overshield Icon", 8)]
@@ -54,7 +54,7 @@ namespace PartyListLayout.Config {
         [LayoutElement(LayoutElementTab.MemberSlot, "Leader Icon", 14)]
         public ElementConfig LeaderIcon = new();
 
-        [LayoutElement(LayoutElementTab.MemberSlot, "Ennity Bar", 15)]
+        [LayoutElement(LayoutElementTab.MemberSlot, "Ennity Bar", 15, LayoutElementFlags.CanTint)]
         public ElementConfig BarEnmity = new();
 
         [LayoutElement(LayoutElementTab.MemberSlot, "Enmity Text", 16)]

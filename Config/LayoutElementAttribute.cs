@@ -26,5 +26,8 @@ namespace PartyListLayout.Config {
     [Flags]
     public enum LayoutElementFlags : ulong {
         None = 0,
+        CanTint = 1,
+        All = CanTint, // Show everything, hide nothing
+
     }
 }

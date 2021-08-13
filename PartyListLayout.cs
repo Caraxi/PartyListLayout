@@ -7,6 +7,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using PartyListLayout.Config;
 using PartyListLayout.GameStructs.NumberArray;
 using PartyListLayout.Helper;
+using Vector3 = System.Numerics.Vector3;
 
 namespace PartyListLayout {
     public unsafe class PartyListLayout : IDisposable {
@@ -269,8 +270,8 @@ namespace PartyListLayout {
                 A = (byte) (vector4.W * 255)
             };
         }
-        
-        private void HandleElementConfig(AtkResNode* resNode, ElementConfig eCfg, bool reset, float defScaleX = 1f, float defScaleY = 1f, float defPosX = 0, float defPosY = 0, Vector4 defColor = default, Vector4 defGlow = default) {
+
+        private void HandleElementConfig(AtkResNode* resNode, ElementConfig eCfg, bool reset, float defScaleX = 1f, float defScaleY = 1f, float defPosX = 0, float defPosY = 0, Vector4 defColor = default, Vector4 defGlow = default, Vector3 defMultiplyColor = default, Vector3 defAddColor = default) {
             if (resNode == null) return;
             if (eCfg.Hide && !reset) {
                 resNode->SetScale(0, 0);
@@ -278,15 +279,26 @@ namespace PartyListLayout {
                 resNode->SetScale(reset ? defScaleX : defScaleX * eCfg.Scale.X, reset ? defScaleY : defScaleY * eCfg.Scale.Y);
                 resNode->SetPositionFloat(reset ? defPosX : defPosX + eCfg.Position.X, reset ? defPosY : defPosY + eCfg.Position.Y);
 
+                if (eCfg.EditorFlags.HasFlag(LayoutElementFlags.CanTint)) {
+                    var multiply = reset ? defMultiplyColor : eCfg.MultiplyColor;
+                    resNode->MultiplyRed = (byte)(multiply.X * 255);
+                    resNode->MultiplyGreen = (byte)(multiply.Y * 255);
+                    resNode->MultiplyBlue = (byte)(multiply.Z * 255);
+
+                    var add = reset ? defAddColor : eCfg.AddColor;
+                    resNode->AddRed = (ushort)(add.X * 1000);
+                    resNode->AddGreen = (ushort)(add.Y * 1000);
+                    resNode->AddBlue = (ushort)(add.Z * 1000);
+                }
+
                 if (eCfg is TextElementConfig tec && resNode->Type == NodeType.Text) {
                     var tn = (AtkTextNode*)resNode;
                     tn->TextColor = GetColor(reset ? defColor : tec.Color );
                     tn->EdgeColor = GetColor(reset ? defGlow : tec.Glow);
                 }
-                
             }
         }
-        
+
         private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
             var c = cNode->Component;
             if (c == null) return;
@@ -304,7 +316,7 @@ namespace PartyListLayout {
             var hpComponent = memberStruct.HPGaugeComponent;
             if (hpComponent != null) {
                 try {
-                    HandleElementConfig(hpComponent->UldManager.NodeList[0], CurrentLayout.BarHP, reset);
+                    HandleElementConfig(hpComponent->UldManager.NodeList[0], CurrentLayout.BarHP, reset, defMultiplyColor: DefaultLayout.BarHP.MultiplyColor);
                     HandleElementConfig(hpComponent->UldManager.NodeList[2], CurrentLayout.NumberHP, reset, defPosX: 4, defPosY: 21, defColor: DefaultLayout.NumberHP.Color, defGlow: DefaultLayout.NumberHP.Glow);
 
                     var hpGauge = hpComponent->UldManager.NodeList[0]->GetComponent();
@@ -312,7 +324,7 @@ namespace PartyListLayout {
                         HandleElementConfig(hpGauge->UldManager.NodeList[10], CurrentLayout.IconOvershield, reset, defPosX: 90, defPosY: 9);
                         hpGauge->UldManager.NodeList[8]->SetScale(reset ? 1 : 0, reset ? 1 : 0);
                         hpGauge->UldManager.NodeList[9]->SetScale(reset ? 1 : 0, reset ? 1 : 0);
-                        HandleElementConfig(hpGauge->UldManager.NodeList[7], CurrentLayout.BarOvershield, reset, defPosY: 8);
+                        HandleElementConfig(hpGauge->UldManager.NodeList[7], CurrentLayout.BarOvershield, reset, defPosY: 8, defMultiplyColor: DefaultLayout.BarOvershield.MultiplyColor);
                     }
 
                 } catch {
@@ -323,8 +335,8 @@ namespace PartyListLayout {
             var mpComponent = memberStruct.MPGaugeBar;
             if (mpComponent != null) {
                 try {
-                    HandleElementConfig(mpComponent->AtkComponentBase.UldManager.NodeList[0], CurrentLayout.BarMP, reset, defPosY: 16);
-                    HandleElementConfig(mpComponent->AtkComponentBase.UldManager.NodeList[1], CurrentLayout.BarMP, reset, defPosY: 16);
+                    HandleElementConfig(mpComponent->AtkComponentBase.UldManager.NodeList[0], CurrentLayout.BarMP, reset, defPosY: 16, defMultiplyColor: DefaultLayout.BarMP.MultiplyColor);
+                    HandleElementConfig(mpComponent->AtkComponentBase.UldManager.NodeList[1], CurrentLayout.BarMP, reset, defPosY: 16, defMultiplyColor: DefaultLayout.BarMP.MultiplyColor);
                     mpComponent->AtkComponentBase.UldManager.NodeList[2]->SetScale(reset ? 1 : 0, reset ? 1 : 0);
                     mpComponent->AtkComponentBase.UldManager.NodeList[3]->SetScale(reset ? 1 : 0, reset ? 1 : 0);
                     HandleElementConfig(mpComponent->AtkComponentBase.UldManager.NodeList[4], CurrentLayout.NumberMP, reset, defPosX: 5, defPosY: 22, defColor: DefaultLayout.NumberMP.Color, defGlow: DefaultLayout.NumberMP.Glow);
@@ -343,7 +355,7 @@ namespace PartyListLayout {
             HandleElementConfig((AtkResNode*) memberStruct.CastingProgressBar, CurrentLayout.Castbar, reset, defPosX: 8 * (reset ? 1 : CurrentLayout.Castbar.Scale.X), defPosY: 7 * (reset ? 1 : CurrentLayout.Castbar.Scale.Y), defScaleX: intArray.CastingPercent >= 0 ? intArray.CastingPercent / 100f : 1f);
             HandleElementConfig((AtkResNode*) memberStruct.CastingProgressBarBackground, CurrentLayout.Castbar, reset);
 
-            HandleElementConfig(memberStruct.EmnityBarContainer, CurrentLayout.BarEnmity, reset, defPosX: 21, defPosY: 36);
+            HandleElementConfig(memberStruct.EmnityBarContainer, CurrentLayout.BarEnmity, reset, defPosX: 21, defPosY: 36, defMultiplyColor: DefaultLayout.BarEnmity.MultiplyColor);
 
             for (var i = 0; i < c->UldManager.NodeListSize; i++) {
                 var node = c->UldManager.NodeList[i];

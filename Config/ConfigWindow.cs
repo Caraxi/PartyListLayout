@@ -106,7 +106,7 @@ namespace PartyListLayout.Config {
 
 
                 ImGui.Indent(40 * ImGui.GetIO().FontGlobalScale);
-                eCfg.Editor(name, ref c, flags, plugin.PartyListLayout);
+                eCfg.Editor(name, ref c, plugin.PartyListLayout);
                 ImGui.Unindent(40 * ImGui.GetIO().FontGlobalScale);
             }
         }
@@ -141,9 +141,18 @@ namespace PartyListLayout.Config {
             '<', '>', ':', '"', '/', '|', '?', '*', '.'
         };
 
+        public void SetupLayoutFlags() {
+            layoutOptions ??= typeof(LayoutConfig).GetFields().Select(f => (f, (LayoutElementAttribute)f.GetCustomAttribute(typeof(LayoutElementAttribute)))).Where(a => a.Item2 != null).OrderBy(a => a.Item2.Priority).ThenBy(a => a.Item2.Name);
+            foreach (var o in layoutOptions) {
+                var f = (ElementConfig) o.field.GetValue(Config.CurrentLayout);
+                f.EditorFlags = o.attr.Flags;
+            }
+        }
+
 
         private void DrawWindow() {
-            layoutOptions ??= typeof(LayoutConfig).GetFields().Select(f => (f, (LayoutElementAttribute)f.GetCustomAttribute(typeof(LayoutElementAttribute)))).Where(a => a.Item2 != null).OrderBy(a => a.Item2.Priority).ThenBy(a => a.Item2.Name);
+            SetupLayoutFlags();
+
             uid = 0;
             var isOpen = true;
 
@@ -193,7 +202,10 @@ namespace PartyListLayout.Config {
                         try {
                             var json = ImGui.GetClipboardText();
                             var cfg = ImportConfig(json);
-                            if (cfg != null) plugin.Config.CurrentLayout = cfg;
+                            if (cfg != null) {
+                                plugin.Config.CurrentLayout = cfg;
+                                SetupLayoutFlags();
+                            }
                             c = true;
                         } catch (Exception ex) {
                             SimpleLog.Error(ex);
@@ -440,6 +452,7 @@ namespace PartyListLayout.Config {
                             var layoutCfg = ImportConfig(json, true);
                             if (layoutCfg != null) {
                                 plugin.Config.CurrentLayout = layoutCfg;
+                                SetupLayoutFlags();
                                 c = true;
                             }
                         } catch (Exception ex) {

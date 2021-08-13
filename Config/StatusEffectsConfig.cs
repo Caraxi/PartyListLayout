@@ -9,8 +9,8 @@ namespace PartyListLayout.Config {
         public Vector2 Separation = new(0);
         public int MaxDisplayed = 10;
         
-        public override void Editor(string name, ref bool c, LayoutElementFlags flags, PartyListLayout l = null) {
-            base.Editor(name, ref c, flags, l);
+        public override void Editor(string name, ref bool c, PartyListLayout l = null) {
+            base.Editor(name, ref c, l);
             ImGui.SetNextItemWidth(120 * ImGui.GetIO().FontGlobalScale);
             c |= ImGui.InputInt($"Max Statuses##{name}", ref MaxDisplayed);
             if (MaxDisplayed < 0) MaxDisplayed = 0;

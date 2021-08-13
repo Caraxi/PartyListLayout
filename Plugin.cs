@@ -27,12 +27,12 @@ namespace PartyListLayout {
             ConfigWindow?.Hide();
         }
 
-        public void Initialize(DalamudPluginInterface pluginInterface) { 
+        public void Initialize(DalamudPluginInterface pluginInterface) {
             FFXIVClientStructs.Resolver.Initialize();
-
-            Config = (PluginConfig) pluginInterface.GetPluginConfig() ?? new PluginConfig();
-
             Instance = this;
+            Config = (PluginConfig) pluginInterface.GetPluginConfig() ?? new PluginConfig();
+            ConfigWindow = new ConfigWindow(this);
+            ConfigWindow.SetupLayoutFlags();
 #if DEBUG
             SimpleLog.SetupBuildPath();
 #endif
@@ -48,7 +48,6 @@ namespace PartyListLayout {
                 HelpMessage = $"Open or close the {Name} config window."
             });
 
-            ConfigWindow = new ConfigWindow(this);
             #if DEBUG
             ConfigWindow.Show();
             #endif
