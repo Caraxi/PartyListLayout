@@ -157,7 +157,25 @@ namespace PartyListLayout.Config {
                         errorStopwatch.Stop();
                     }
                 } else {
-                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - (105 * ImGui.GetIO().FontGlobalScale));
+                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - (230 * ImGui.GetIO().FontGlobalScale));
+
+                    if (!Config.HideKofi) {
+                        var buttonText = "Support on Ko-fi";
+                        var buttonColor = 0x005E5BFFu;
+                        ImGui.PushStyleColor(ImGuiCol.Button, 0xFF000000 | buttonColor);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, 0xDD000000 | buttonColor);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, 0xAA000000 | buttonColor);
+
+                        if (ImGui.Button(buttonText, new Vector2(120, 24))) {
+                            Common.OpenBrowser("https://ko-fi.com/Caraxi");
+                        }
+                        ImGui.PopStyleColor(3);
+                    } else {
+                        ImGui.Dummy(new Vector2(120, 24));
+                    }
+
+                    ImGui.SameLine();
+
                     if (ImGui.Button("Export")) {
                         var json = GetConfigExport();
                         ImGui.SetClipboardText(json);
@@ -185,22 +203,10 @@ namespace PartyListLayout.Config {
 
                 c |= ImGui.Checkbox("Preview", ref Config.PreviewMode);
                 if (ImGui.IsItemHovered()) ImGui.SetTooltip("Party list must not be hidden for preview to work.\nEither join a party or disable 'Hide party list when solo' in the character config.");
-                ImGui.SameLine();
-                ImGui.Dummy(new Vector2(30, ImGui.GetItemRectSize().Y) * ImGui.GetIO().FontGlobalScale);
-
-
-                if (!Config.HideKofi) {
-                    var buttonText = "Support on Ko-fi";
-                    var buttonColor = 0x005E5BFFu;
+                if (Config.PreviewMode) {
                     ImGui.SameLine();
-                    ImGui.PushStyleColor(ImGuiCol.Button, 0xFF000000 | buttonColor);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonActive, 0xDD000000 | buttonColor);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, 0xAA000000 | buttonColor);
-
-                    if (ImGui.Button(buttonText, new Vector2(120, ImGui.GetItemRectSize().Y))) {
-                        Common.OpenBrowser("https://ko-fi.com/Caraxi");
-                    }
-                    ImGui.PopStyleColor(3);
+                    ImGui.SetNextItemWidth(80);
+                    c |= ImGui.SliderInt("##previewCount", ref Config.PreviewCount, 1, 8);
                 }
 
                 ImGui.Separator();

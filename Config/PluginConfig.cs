@@ -6,6 +6,7 @@ namespace PartyListLayout.Config {
 
 
         [JsonIgnore] public bool PreviewMode;
+        [JsonIgnore] public int PreviewCount = 8;
 
         public LayoutConfig CurrentLayout = new();
         public bool AutoSave = true;

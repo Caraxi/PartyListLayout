@@ -138,7 +138,7 @@ namespace PartyListLayout {
 
         private void SetupPreview(AddonPartyList* partyList, AddonPartyListIntArray* intArray) {
             var ia = (AddonPartyListMemberIntArray*) &intArray->PartyMember;
-            for (var i = intArray->PartyMemberCount; i < 8; i++) {
+            for (var i = intArray->PartyMemberCount; i < 8 && i < plugin.Config.PreviewCount; i++) {
                 var m = partyList->PartyMember[i];
                 m.PartyMemberComponent->OwnerNode->AtkResNode.ToggleVisibility(true);
 
