@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using Dalamud.Game.Text;
 using ImGuiNET;
 using Newtonsoft.Json;
@@ -19,6 +21,8 @@ namespace PartyListLayout.Config {
         private readonly Stopwatch errorStopwatch = new();
 
         public PluginConfig Config => plugin.Config;
+
+        private IEnumerable<(FieldInfo field, LayoutElementAttribute attr)> layoutOptions = null;
 
         public bool IsOpen {
             get => isVisible;
@@ -57,7 +61,7 @@ namespace PartyListLayout.Config {
         }
 
 
-        private void ElementConfigEditor(string name, ElementConfig eCfg, ElementConfig defaultCfg, ref bool c) {
+        private void ElementConfigEditor(string name, ElementConfig eCfg, ElementConfig defaultCfg, ref bool c, LayoutElementFlags flags) {
 
             var elementVisible = !eCfg.Hide;
 
@@ -102,7 +106,7 @@ namespace PartyListLayout.Config {
 
 
                 ImGui.Indent(40 * ImGui.GetIO().FontGlobalScale);
-                eCfg.Editor(name, ref c, plugin.PartyListLayout);
+                eCfg.Editor(name, ref c, flags, plugin.PartyListLayout);
                 ImGui.Unindent(40 * ImGui.GetIO().FontGlobalScale);
             }
         }
@@ -139,6 +143,7 @@ namespace PartyListLayout.Config {
 
 
         private void DrawWindow() {
+            layoutOptions ??= typeof(LayoutConfig).GetFields().Select(f => (f, (LayoutElementAttribute)f.GetCustomAttribute(typeof(LayoutElementAttribute)))).Where(a => a.Item2 != null).OrderBy(a => a.Item2.Priority).ThenBy(a => a.Item2.Name);
             uid = 0;
             var isOpen = true;
 
@@ -211,7 +216,6 @@ namespace PartyListLayout.Config {
 
                 ImGui.Separator();
 
-
                 ImGui.BeginChild("partyListLayout_scroll", new Vector2(-1, -1), false);
 
                 var tabHeight = ImGui.CalcTextSize("A").Y + (2 * ImGui.GetStyle().FramePadding.Y);
@@ -276,26 +280,16 @@ namespace PartyListLayout.Config {
                         c |= ImGui.SliderInt("Width", ref Config.CurrentLayout.SlotWidth, 50, 500);
                         c |= ImGui.SliderInt("Height", ref Config.CurrentLayout.SlotHeight, 5, 160);
                         ImGui.Unindent();
+
+                        foreach (var a in layoutOptions.Where(a => a.attr.Tab == LayoutElementTab.PartyGrid)) {
+                            ElementConfigEditor(a.attr.Name, (ElementConfig) a.field.GetValue(Config.CurrentLayout), (ElementConfig) a.field.GetValue(LayoutConfig.Default), ref c, a.attr.Flags);
+                        }
                         break;
                     }
                     case Tabs.MemberSlot: {
-                        ElementConfigEditor("Name", Config.CurrentLayout.Name, LayoutConfig.Default.Name, ref c);
-                        ElementConfigEditor("Class Icon", Config.CurrentLayout.ClassIcon, LayoutConfig.Default.ClassIcon, ref c);
-                        ElementConfigEditor("HP Bar", Config.CurrentLayout.BarHP, LayoutConfig.Default.BarHP, ref c);
-                        ElementConfigEditor("HP Number", Config.CurrentLayout.NumberHP, LayoutConfig.Default.NumberHP, ref c);
-                        ElementConfigEditor("MP Bar", Config.CurrentLayout.BarMP, LayoutConfig.Default.BarMP, ref c);
-                        ElementConfigEditor("MP Number", Config.CurrentLayout.NumberMP, LayoutConfig.Default.NumberMP, ref c);
-                        ElementConfigEditor("Overshield Bar", Config.CurrentLayout.BarOvershield, LayoutConfig.Default.BarOvershield, ref c);
-                        ElementConfigEditor("Overshield Icon", Config.CurrentLayout.IconOvershield, LayoutConfig.Default.IconOvershield, ref c);
-                        ElementConfigEditor("Chocobo Timer", Config.CurrentLayout.ChocoboTimer, LayoutConfig.Default.ChocoboTimer, ref c);
-                        ElementConfigEditor("Chocobo Timer Clock Icon", Config.CurrentLayout.ChocoboTimerClockIcon, LayoutConfig.Default.ChocoboTimerClockIcon, ref c);
-                        ElementConfigEditor("Castbar", Config.CurrentLayout.Castbar, LayoutConfig.Default.Castbar, ref c);
-                        ElementConfigEditor("Castbar Text", Config.CurrentLayout.CastbarText, LayoutConfig.Default.CastbarText, ref c);
-                        ElementConfigEditor("Slot Number", Config.CurrentLayout.Slot, LayoutConfig.Default.Slot, ref c);
-                        ElementConfigEditor("Leader Icon", Config.CurrentLayout.LeaderIcon, LayoutConfig.Default.LeaderIcon, ref c);
-                        ElementConfigEditor("Enmity Bar", Config.CurrentLayout.BarEnmity, LayoutConfig.Default.BarEnmity, ref c);
-                        ElementConfigEditor("Enmity Text", Config.CurrentLayout.TextEnmity, LayoutConfig.Default.TextEnmity, ref c);
-                        ElementConfigEditor("Status Effects", Config.CurrentLayout.StatusEffects, LayoutConfig.Default.StatusEffects, ref c);
+                        foreach (var a in layoutOptions.Where(a => a.attr.Tab == LayoutElementTab.MemberSlot)) {
+                            ElementConfigEditor(a.attr.Name, (ElementConfig) a.field.GetValue(Config.CurrentLayout), (ElementConfig) a.field.GetValue(LayoutConfig.Default), ref c, a.attr.Flags);
+                        }
                         break;
                     }
                     case Tabs.Presets: {
