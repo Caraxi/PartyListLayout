@@ -38,7 +38,7 @@ namespace PartyListLayout {
                     
                     for (var i = 0; i < 10; i++) {
                         statusSlotPositions[i] = (xO, yO);
-                        if (CurrentLayout.StatusEffects.ReverseFill) {
+                        if (CurrentLayout.StatusEffects.TwoLines && CurrentLayout.StatusEffects.ReverseFill) {
                             if (CurrentLayout.StatusEffects.Vertical) {
                                 xO++;
                                 if (CurrentLayout.StatusEffects.TwoLines && xO % 2 == 0) {
