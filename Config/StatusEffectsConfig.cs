@@ -3,10 +3,20 @@ using ImGuiNET;
 
 namespace PartyListLayout.Config {
     public class StatusEffectsConfig : ElementConfig {
+
+        [SerializeKey(SerializeKey.StatusEffectsTwoLines)]
         public bool TwoLines;
+
+        [SerializeKey(SerializeKey.StatusEffectsVertical)]
         public bool Vertical;
+
+        [SerializeKey(SerializeKey.StatusEffectsReverseFill)]
         public bool ReverseFill;
+
+        [SerializeKey(SerializeKey.StatusEffectsSeparation)]
         public Vector2 Separation = new(0);
+
+        [SerializeKey(SerializeKey.StatusEffectsMax)]
         public int MaxDisplayed = 10;
         
         public override void Editor(string name, ref bool c, PartyListLayout l = null) {

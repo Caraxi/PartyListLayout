@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
+using System.Text;
 using FFXIVClientStructs.FFXIV.Client.Graphics;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using PartyListLayout.Config;
 using PartyListLayout.GameStructs.NumberArray;
+using PartyListLayout.GameStructs.StringArray;
 using PartyListLayout.Helper;
 using Vector3 = System.Numerics.Vector3;
 
@@ -141,14 +144,16 @@ namespace PartyListLayout {
             var ia = (AddonPartyListMemberIntArray*) &intArray->PartyMember;
             for (var i = intArray->PartyMemberCount; i < 8 && i < plugin.Config.PreviewCount; i++) {
                 var m = partyList->PartyMember[i];
+                var mia = intArray->PartyMember[i];
+
                 m.PartyMemberComponent->OwnerNode->AtkResNode.ToggleVisibility(true);
 
                 m.Name->SetText($" Party Member'{i+1}");
-                m.Name->AtkResNode.ToggleVisibility(i % 2 == 0);
+
+                m.Name->AtkResNode.ToggleVisibility(i % 2 == 0 || CurrentLayout.Name.KeepVisibleWhileCasting);
 
                 m.ClassJobIcon->AtkResNode.ToggleVisibility(true);
-                m.ClassJobIcon->LoadIconTexture(62101 + i, 0);
-
+                m.ClassJobIcon->LoadIconTexture(mia.ClassJobIcon > 0 ? mia.ClassJobIcon : 62101 + i, 0);
                 m.CastingActionName->SetText($"Spell Name {i+1}");
                 m.CastingActionName->AtkResNode.ToggleVisibility(i % 2 != 0);
                 m.CastingProgressBar->AtkResNode.ToggleVisibility(i % 2 != 0);
@@ -197,11 +202,16 @@ namespace PartyListLayout {
 
             var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
             var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
+            var partyListStrings = atkArrayDataHolder.StringArrays[3];
             var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;
+            var partyStringList = (AddonPartyListStringArray*)partyListStrings->StringArray;
 
             if (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen && !reset) {
                 SetupPreview(partyList, partyIntList);
             }
+
+            HandleElementConfig((AtkResNode*) partyList->PartyTypeTextNode, reset ? DefaultLayout.PartyTypeText : CurrentLayout.PartyTypeText, false);
+
 
             var visibleIndex = 0;
 
@@ -224,13 +234,18 @@ namespace PartyListLayout {
                         >= 0 and <= 7 => partyIntList->PartyMember[i],
                         _ => default
                     };
-                    
+
+                    var stringList = i switch {
+                        >= 0 and <= 7 => partyStringList->PartyMembers[i],
+                        _ => default
+                    };
+
                     var c = pm.PartyMemberComponent;
                     if (c == null) continue;
                     var cNode = c->OwnerNode;
                     if (cNode == null) continue;
                     
-                    if (cNode->AtkResNode.IsVisible || reset) UpdateSlot(cNode, visibleIndex, pm, intList, ref maxX, ref maxY, reset);
+                    if (cNode->AtkResNode.IsVisible || reset) UpdateSlot(cNode, visibleIndex, pm, intList, stringList, ref maxX, ref maxY, reset);
                     if (cNode->AtkResNode.IsVisible) visibleIndex++;
 
                     if (i == 11) {
@@ -271,7 +286,7 @@ namespace PartyListLayout {
             };
         }
 
-        private void HandleElementConfig(AtkResNode* resNode, ElementConfig eCfg, bool reset, float defScaleX = 1f, float defScaleY = 1f, float defPosX = 0, float defPosY = 0, Vector4 defColor = default, Vector4 defGlow = default, Vector3 defMultiplyColor = default, Vector3 defAddColor = default) {
+        private void HandleElementConfig(AtkResNode* resNode, ElementConfig eCfg, bool reset, float defScaleX = 1f, float defScaleY = 1f, float defPosX = 0, float defPosY = 0, Vector4 defColor = default, Vector4 defGlow = default, Vector3 defMultiplyColor = default, Vector3 defAddColor = default, string defText = null) {
             if (resNode == null) return;
             if (eCfg.Hide && !reset) {
                 resNode->SetScale(0, 0);
@@ -295,23 +310,61 @@ namespace PartyListLayout {
                     var tn = (AtkTextNode*)resNode;
                     tn->TextColor = GetColor(reset ? defColor : tec.Color );
                     tn->EdgeColor = GetColor(reset ? defGlow : tec.Glow);
+
+                    if (defText != null && tec is PlayerNameTextElementConfig pnTac) {
+                        if (reset) {
+                            tn->SetText(defText);
+                        } else {
+                            if (pnTac.KeepVisibleWhileCasting) resNode->ToggleVisibility(true);
+
+                            var splitName = defText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            if (splitName.Length == 3) {
+                                var newNameBuilder = new StringBuilder();
+                                if (!pnTac.RemoveLevel) {
+                                    newNameBuilder.Append(splitName[0]);
+                                }
+
+                                if (!pnTac.RemoveFirst) {
+                                    if (newNameBuilder.Length > 0) newNameBuilder.Append(" ");
+                                    newNameBuilder.Append(splitName[1]);
+                                }
+
+                                if (!pnTac.RemoveSecond) {
+                                    if (newNameBuilder.Length > 0) newNameBuilder.Append(" ");
+                                    newNameBuilder.Append(splitName[2]);
+                                }
+
+                                var newName = newNameBuilder.ToString();
+
+                                tn->SetText(newName);
+                            }
+                        }
+                    }
                 }
+
+
+
             }
         }
 
-        private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
+        private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, AddonPartyListPartyMemberStrings stringArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
             var c = cNode->Component;
             if (c == null) return;
             c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)CurrentLayout.SlotWidth); // Collision Node
-            c->UldManager.NodeList[1]->SetWidth(reset ? (ushort)367 : (ushort)(CurrentLayout.SlotWidth + 1));
-            c->UldManager.NodeList[2]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth - 46)); 
-            c->UldManager.NodeList[3]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth - 46));
-            
-            c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)(CurrentLayout.SlotHeight - 16));
+            c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)CurrentLayout.SlotHeight);
+            c->UldManager.NodeList[0]->SetPositionFloat(reset ? 16 : 46, reset ? 12 : 18);
+
+            c->UldManager.NodeList[1]->SetWidth(reset ? (ushort)367 : (ushort)(CurrentLayout.SlotWidth - 5));
             c->UldManager.NodeList[1]->SetHeight(reset ? (ushort) 69 : (ushort)(CurrentLayout.SlotHeight + 9));
+
+
+            c->UldManager.NodeList[2]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth  - 30));
             c->UldManager.NodeList[2]->SetHeight(reset ? (ushort) 69 : (ushort)(CurrentLayout.SlotHeight + 9));
-            c->UldManager.NodeList[2]->SetHeight(reset ? (ushort) 48 : (ushort)(CurrentLayout.SlotHeight - 12));
-            
+
+            c->UldManager.NodeList[3]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth));
+            c->UldManager.NodeList[3]->SetHeight(reset ? (ushort) 48 : (ushort)(CurrentLayout.SlotHeight - 12));
+
             // Elements
             var hpComponent = memberStruct.HPGaugeComponent;
             if (hpComponent != null) {
@@ -346,7 +399,7 @@ namespace PartyListLayout {
                 }
             }
             
-            HandleElementConfig((AtkResNode*) memberStruct.Name, CurrentLayout.Name, reset, defPosX: 17);
+            HandleElementConfig((AtkResNode*) memberStruct.Name, CurrentLayout.Name, reset, defPosX: 17, defText: (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen && !reset) ? $" Party{visibleIndex + 1} Member{ visibleIndex + 1}" : stringArray.PlayerNameAndLevel);
             HandleElementConfig((AtkResNode*) memberStruct.ClassJobIcon, CurrentLayout.ClassIcon, reset, defPosX: 24, defPosY: 18);
             c->UldManager.NodeList[4]->SetPositionFloat(memberStruct.ClassJobIcon->AtkResNode.X - 21 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleX), memberStruct.ClassJobIcon->AtkResNode.Y - 13 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleY));
             c->UldManager.NodeList[4]->SetScale(memberStruct.ClassJobIcon->AtkResNode.ScaleX, memberStruct.ClassJobIcon->AtkResNode.ScaleY);

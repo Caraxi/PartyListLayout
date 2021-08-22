@@ -66,10 +66,19 @@ namespace PartyListLayout.Config {
             var elementVisible = !eCfg.Hide;
 
 
-            if (ImGui.Checkbox($"##hideItem_{name}", ref elementVisible)) {
-                eCfg.Hide = !elementVisible;
-                c = true;
+            if (flags.HasFlag(LayoutElementFlags.NoHide)) {
+                ImGui.PushStyleColor(ImGuiCol.FrameBg, Vector4.Zero);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Vector4.Zero);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, Vector4.Zero);
+                ImGui.Checkbox($"##hideItem_{name}", ref elementVisible);
+                ImGui.PopStyleColor(3);
+            } else {
+                if (ImGui.Checkbox($"##hideItem_{name}", ref elementVisible)) {
+                    eCfg.Hide = !elementVisible;
+                    c = true;
+                }
             }
+
 
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, eCfg.Hide ? 0x88FFFFFF : 0xFFFFFFFF);
@@ -191,21 +200,31 @@ namespace PartyListLayout.Config {
                     ImGui.SameLine();
 
                     if (ImGui.Button("Export")) {
-                        var json = GetConfigExport();
-                        ImGui.SetClipboardText(json);
+                        var newExport = Util.Base64Encode(Util.Compress(LayoutSerializer.SerializeLayout(Config.CurrentLayout)));
+                        ImGui.SetClipboardText(newExport);
                     }
 
                     if (ImGui.IsItemHovered()) ImGui.SetTooltip($"Copy {plugin.Name} config to clipboard.");
                     ImGui.SameLine();
                     if (ImGui.Button("Import")) {
                         importError = string.Empty;
+
                         try {
+
+                            AutoSavePreset();
+                            var importLayout = LayoutSerializer.DeserializeLayout(Util.Decompress(Util.Base64Decode(ImGui.GetClipboardText())));
+                            if (importLayout != null) {
+                                plugin.Config.CurrentLayout = importLayout;
+                                SetupLayoutFlags();
+                            }
+                            /*
                             var json = ImGui.GetClipboardText();
                             var cfg = ImportConfig(json);
                             if (cfg != null) {
                                 plugin.Config.CurrentLayout = cfg;
                                 SetupLayoutFlags();
                             }
+                            */
                             c = true;
                         } catch (Exception ex) {
                             SimpleLog.Error(ex);
@@ -217,7 +236,6 @@ namespace PartyListLayout.Config {
                 }
 
                 ImGui.SetCursorPos(p);
-
                 c |= ImGui.Checkbox("Preview", ref Config.PreviewMode);
                 if (ImGui.IsItemHovered()) ImGui.SetTooltip("Party list must not be hidden for preview to work.\nEither join a party or disable 'Hide party list when solo' in the character config.");
                 if (Config.PreviewMode) {
@@ -361,6 +379,24 @@ namespace PartyListLayout.Config {
 
                             ImGui.TableHeadersRow();
                             ImGui.TableNextColumn();
+
+                            ImGui.PushStyleColor(ImGuiCol.Text, 0xFF00FFFF);
+
+                            ImGui.Text("Default Preset");
+                            ImGui.TableNextColumn();
+                            ImGui.Text("Built-in");
+                            ImGui.TableNextColumn();
+                            ImGui.Text("Built-in");
+                            ImGui.TableNextColumn();
+                            if (ImGui.Button("Load Default")) {
+                                AutoSavePreset();
+                                plugin.Config.CurrentLayout = new LayoutConfig();
+                                c = true;
+                            }
+                            ImGui.TableNextColumn();
+
+                            ImGui.PopStyleColor();
+
 
                             PrintPresetList(dirPath, ref c);
 

@@ -1,6 +1,7 @@
 ﻿using PartyListLayout.Config;
 using PartyListLayout.Helper;
 using System.Linq;
+using System.Threading.Tasks;
 using Dalamud.Game.Command;
 using Dalamud.Plugin;
 
@@ -16,7 +17,10 @@ namespace PartyListLayout {
         
         public static Plugin Instance { get; private set; }
 
+        private bool isDisposed = false;
+
         public void Dispose() {
+            isDisposed = true;
             PartyListLayout?.Dispose();
             foreach (var hook in Common.HookList.Where(hook => !hook.IsDisposed)) {
                 if (hook.IsEnabled) hook.Disable();
@@ -27,30 +31,36 @@ namespace PartyListLayout {
             ConfigWindow?.Hide();
         }
 
-        public void Initialize(DalamudPluginInterface pluginInterface) {
-            FFXIVClientStructs.Resolver.Initialize();
-            Instance = this;
-            Config = (PluginConfig) pluginInterface.GetPluginConfig() ?? new PluginConfig();
+        public void SecondInit() {
+
+            Config = (PluginConfig) PluginInterface.GetPluginConfig() ?? new PluginConfig();
             ConfigWindow = new ConfigWindow(this);
             ConfigWindow.SetupLayoutFlags();
 #if DEBUG
             SimpleLog.SetupBuildPath();
 #endif
-            this.PluginInterface = pluginInterface;
-
-            pluginInterface.UiBuilder.OnOpenConfigUi += OnConfigCommandHandler;
+            PluginInterface.UiBuilder.OnOpenConfigUi += OnConfigCommandHandler;
 
             PartyListLayout = new PartyListLayout(this);
             PartyListLayout.Enable();
 
-            pluginInterface.CommandManager.AddHandler("/playout", new CommandInfo(OnConfigCommandHandler) {
+            PluginInterface.CommandManager.AddHandler("/playout", new CommandInfo(OnConfigCommandHandler) {
                 ShowInHelp = true,
                 HelpMessage = $"Open or close the {Name} config window."
             });
 
-            #if DEBUG
+#if DEBUG
             ConfigWindow.Show();
-            #endif
+#endif
+        }
+
+        public void Initialize(DalamudPluginInterface pluginInterface) {
+            this.PluginInterface = pluginInterface;
+            Instance = this;
+            Task.Run(FFXIVClientStructs.Resolver.Initialize).ContinueWith((_) => {
+                if (isDisposed) return;
+                SecondInit();
+            });
         }
 
         public void OnConfigCommandHandler(object command, object args) {

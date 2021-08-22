@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Numerics;
 using System.Text;
+using ImGuiNET;
 
 namespace PartyListLayout.Helper {
     public class Util {
@@ -55,6 +57,14 @@ namespace PartyListLayout.Helper {
 
         public static byte[] Base64Decode(string b64String) {
             return System.Convert.FromBase64String(b64String);
+        }
+
+        public static Vector4 V4FromRgba(uint rgba) => ImGui.ColorConvertU32ToFloat4(rgba);
+
+        public static unsafe string ReadString(byte* stringPtr) {
+            var l = 0;
+            while (stringPtr[l] != 0) l++;
+            return Encoding.UTF8.GetString(stringPtr, l);
         }
     }
 }

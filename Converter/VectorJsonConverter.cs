@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
@@ -7,11 +8,11 @@ namespace PartyListLayout.Converter {
     public class VectorJsonConverter : JsonConverter {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
             if (value is Vector2 v2) {
-                writer.WriteValue($"{v2.X}|{v2.Y}");
+                writer.WriteValue($"{v2.X}|{v2.Y}".Replace(',', '.'));
             } else if (value is Vector3 v3) {
-                writer.WriteValue($"{v3.X}|{v3.Y}|{v3.Z}");
+                writer.WriteValue($"{v3.X}|{v3.Y}|{v3.Z}".Replace(',', '.'));
             } else if (value is Vector4 v4) {
-                writer.WriteValue($"{v4.X}|{v4.Y}|{v4.Z}|{v4.W}");
+                writer.WriteValue($"{v4.X}|{v4.Y}|{v4.Z}|{v4.W}".Replace(',', '.'));
             }
         }
 
@@ -19,7 +20,7 @@ namespace PartyListLayout.Converter {
             float[] values;
             var str = (string)reader.Value;
             try {
-                values = str.Split('|').Select(float.Parse).ToArray();
+                values = str.Split('|').Select(s => s.Replace(',', '.')).Select((s) => float.Parse(s, CultureInfo.InvariantCulture)).ToArray();
             } catch {
                 values = null;
             }
