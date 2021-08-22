@@ -166,8 +166,8 @@ namespace PartyListLayout.Converter {
                 var b = TakeBytes(bytes, 1);
                 field.SetValue(obj, b[0] != 0);
             } else if (field.FieldType == typeof(int)) {
-                var b = TakeBytes(bytes, 4);
-                field.SetValue(obj, BitConverter.ToInt32(b, 0));
+                var b = GetInteger(bytes);
+                field.SetValue(obj, (int)b);
             } else if (field.FieldType == typeof(float)) {
                 var b = TakeBytes(bytes, 4);
                 field.SetValue(obj, BitConverter.ToSingle(b, 0));
