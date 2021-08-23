@@ -1,6 +1,6 @@
 name: Build Party List Layout for Pull Request
 on:
-  pull-request:
+  pull_request:
 jobs:
   build:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
