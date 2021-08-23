@@ -137,7 +137,10 @@ namespace PartyListLayout {
             isPreviewing = true;
             var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
 
-            Common.GetUnitBase<AddonPartyList>()->AtkUnitBase.OnUpdate(atkArrayDataHolder.NumberArrays, atkArrayDataHolder.StringArrays);
+            var addon = Common.GetUnitBase<AddonPartyList>();
+            if (addon != null) {
+                addon->AtkUnitBase.OnUpdate(atkArrayDataHolder.NumberArrays, atkArrayDataHolder.StringArrays);
+            }
         }
 
         private void SetupPreview(AddonPartyList* partyList, AddonPartyListIntArray* intArray) {
