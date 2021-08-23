@@ -4,7 +4,7 @@
         <TargetFramework>net472</TargetFramework>
         <LangVersion>preview</LangVersion>
         <Platforms>AnyCPU</Platforms>
-        <Configurations>Debug;Release;DebugNet5</Configurations>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
     <PropertyGroup Label="Build">
         <OutputType>Library</OutputType>

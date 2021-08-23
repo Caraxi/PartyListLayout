@@ -19,33 +19,24 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-		DebugNet5|Any CPU = DebugNet5|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
-		{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
-		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
 		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.DebugNet5|Any CPU.ActiveCfg = DebugNet5|Any CPU
-		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.DebugNet5|Any CPU.Build.0 = DebugNet5|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
