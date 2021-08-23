@@ -28,7 +28,7 @@ namespace PartyListLayout.Config {
         None = 0,
         CanTint = 1,
         NoHide = 2,
+        NoPosition = 4,
         All = CanTint, // Show everything, hide nothing
-
     }
 }

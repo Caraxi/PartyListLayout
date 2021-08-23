@@ -351,19 +351,19 @@ namespace PartyListLayout {
         private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, AddonPartyListPartyMemberStrings stringArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
             var c = cNode->Component;
             if (c == null) return;
-            c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)CurrentLayout.SlotWidth); // Collision Node
-            c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)CurrentLayout.SlotHeight);
+            c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)(CurrentLayout.SlotWidth * CurrentLayout.SelectionArea.Scale.X)); // Collision Node
+            c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)(CurrentLayout.SlotHeight * CurrentLayout.SelectionArea.Scale.Y));
             c->UldManager.NodeList[0]->SetPositionFloat(reset ? 16 : 46, reset ? 12 : 18);
 
-            c->UldManager.NodeList[1]->SetWidth(reset ? (ushort)367 : (ushort)(CurrentLayout.SlotWidth - 5));
-            c->UldManager.NodeList[1]->SetHeight(reset ? (ushort) 69 : (ushort)(CurrentLayout.SlotHeight + 9));
+            c->UldManager.NodeList[1]->SetWidth(reset ? (ushort)367 : (ushort)((CurrentLayout.SlotWidth - 5) * CurrentLayout.SelectionArea.Scale.X));
+            c->UldManager.NodeList[1]->SetHeight(reset ? (ushort) 69 : (ushort)((CurrentLayout.SlotHeight + 9) * CurrentLayout.SelectionArea.Scale.Y));
 
 
-            c->UldManager.NodeList[2]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth  - 30));
-            c->UldManager.NodeList[2]->SetHeight(reset ? (ushort) 69 : (ushort)(CurrentLayout.SlotHeight + 9));
+            c->UldManager.NodeList[2]->SetWidth(reset ? (ushort)320 : (ushort)((CurrentLayout.SlotWidth  - 30) * CurrentLayout.SelectionArea.Scale.X));
+            c->UldManager.NodeList[2]->SetHeight(reset ? (ushort) 69 : (ushort)((CurrentLayout.SlotHeight + 9) * CurrentLayout.SelectionArea.Scale.Y));
 
-            c->UldManager.NodeList[3]->SetWidth(reset ? (ushort)320 : (ushort)(CurrentLayout.SlotWidth));
-            c->UldManager.NodeList[3]->SetHeight(reset ? (ushort) 48 : (ushort)(CurrentLayout.SlotHeight - 12));
+            c->UldManager.NodeList[3]->SetWidth(reset ? (ushort)320 : (ushort)((CurrentLayout.SlotWidth) * CurrentLayout.SelectionArea.Scale.X));
+            c->UldManager.NodeList[3]->SetHeight(reset ? (ushort) 48 : (ushort)((CurrentLayout.SlotHeight - 12) * CurrentLayout.SelectionArea.Scale.Y));
 
             // Elements
             var hpComponent = memberStruct.HPGaugeComponent;

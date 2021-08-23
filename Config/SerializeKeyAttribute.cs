@@ -33,6 +33,7 @@ namespace PartyListLayout.Config {
         BarEnmity = 3150,
         TextEnmity = 3160,
         StatusEffects = 3170,
+        SelectionArea = 3180,
 
         // ElementConfig
         ElementHide = 10000,
@@ -49,6 +50,7 @@ namespace PartyListLayout.Config {
         PlayerTextRemoveLevel = 11500,
         PlayerTextRemoveFirst = 11510,
         PlayerTextRemoveSecond = 11520,
+        KeepVisibleWhileCasting = 12041, // This should have been 11530 but some idiot forgot to change it, and now it is here forever.
 
         // StatusEffectsConfig
         StatusEffectsTwoLines = 12000,
@@ -56,8 +58,6 @@ namespace PartyListLayout.Config {
         StatusEffectsReverseFill = 12020,
         StatusEffectsSeparation = 12030,
         StatusEffectsMax = 12040,
-
-        KeepVisibleWhileCasting
     }
 
     public class SerializeKeyAttribute : Attribute {

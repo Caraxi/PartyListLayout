@@ -15,7 +15,7 @@ namespace PartyListLayout.Config {
         [SerializeKey(SerializeKey.ElementHide, ExcludeFlag = LayoutElementFlags.NoHide)]
         public bool Hide;
 
-        [SerializeKey(SerializeKey.ElementPosition)]
+        [SerializeKey(SerializeKey.ElementPosition, ExcludeFlag = LayoutElementFlags.NoPosition)]
         public Vector2 Position = new(0);
 
         [SerializeKey(SerializeKey.ElementScale)]
@@ -31,7 +31,7 @@ namespace PartyListLayout.Config {
         public Vector3 AddColor = new(0);
 
         public virtual void Editor(string name, ref bool c, PartyListLayout l = null) {
-            c |= ImGui.DragFloat2($"Position##{name}", ref Position);
+            if (!EditorFlags.HasFlag(LayoutElementFlags.NoHide)) c |= ImGui.DragFloat2($"Position##{name}", ref Position);
             c |= ImGui.SliderFloat2($"Scale##{name}", ref Scale, 0, 5);
 
             if (EditorFlags.HasFlag(LayoutElementFlags.CanTint)) {
