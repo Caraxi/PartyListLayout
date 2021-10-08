@@ -24,11 +24,11 @@ namespace PartyListLayout.Helper {
 
             if (string.IsNullOrEmpty(name)) return null;
             
-            return (T*) Plugin.Instance.PluginInterface.Framework.Gui.GetUiObjectByName(name, index);
+            return (T*) GetUnitBase(name, index);
         }
 
         public static HookWrapper<T> Hook<T>(string signature, T detour, bool enable = true, int addressOffset = 0) where T : Delegate {
-            var addr = Plugin.Instance.PluginInterface.TargetModuleScanner.ScanText(signature);
+            var addr = Plugin.SigScanner.ScanText(signature);
             var h = new Hook<T>(addr + addressOffset, detour);
             var wh = new HookWrapper<T>(h);
             if (enable) wh.Enable();

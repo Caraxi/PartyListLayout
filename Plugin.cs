@@ -1,14 +1,28 @@
-﻿using PartyListLayout.Config;
+﻿using System.Diagnostics.CodeAnalysis;
+using PartyListLayout.Config;
 using PartyListLayout.Helper;
 using System.Linq;
 using System.Threading.Tasks;
+using Dalamud.Game;
+using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.Command;
+using Dalamud.Game.Gui;
+using Dalamud.IoC;
 using Dalamud.Plugin;
+using Lumina.Excel.GeneratedSheets;
 
 namespace PartyListLayout {
+    [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Local")]
     public class Plugin : IDalamudPlugin {
         public string Name => "Party List Layout";
-        public DalamudPluginInterface PluginInterface { get; private set; }
+
+        [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+        [PluginService] public static CommandManager CommandManager { get; private set; } = null!;
+        [PluginService] public static Framework Framework { get; private set; } = null!;
+        [PluginService] public static GameGui GameGui { get; private set; } = null!;
+        [PluginService] public static SigScanner SigScanner { get; private set; } = null!;
+        [PluginService] public static KeyState KeyState { get; private set; } = null!;
+
 
         public PartyListLayout PartyListLayout;
 
@@ -17,7 +31,8 @@ namespace PartyListLayout {
         
         public static Plugin Instance { get; private set; }
 
-        private bool isDisposed = false;
+        private bool isDisposed;
+
 
         public void Dispose() {
             isDisposed = true;
@@ -27,11 +42,11 @@ namespace PartyListLayout {
                 hook.Dispose();
             }
 
-            PluginInterface.CommandManager.RemoveHandler("/playout");
+            CommandManager.RemoveHandler("/playout");
             ConfigWindow?.Hide();
         }
 
-        public void SecondInit() {
+        public void Init() {
 
             Config = (PluginConfig) PluginInterface.GetPluginConfig() ?? new PluginConfig();
             ConfigWindow = new ConfigWindow(this);
@@ -39,12 +54,12 @@ namespace PartyListLayout {
 #if DEBUG
             SimpleLog.SetupBuildPath();
 #endif
-            PluginInterface.UiBuilder.OnOpenConfigUi += OnConfigCommandHandler;
+            PluginInterface.UiBuilder.OpenConfigUi += OnConfig;
 
             PartyListLayout = new PartyListLayout(this);
             PartyListLayout.Enable();
 
-            PluginInterface.CommandManager.AddHandler("/playout", new CommandInfo(OnConfigCommandHandler) {
+            CommandManager.AddHandler("/playout", new CommandInfo(OnConfigCommandHandler) {
                 ShowInHelp = true,
                 HelpMessage = $"Open or close the {Name} config window."
             });
@@ -54,16 +69,21 @@ namespace PartyListLayout {
 #endif
         }
 
-        public void Initialize(DalamudPluginInterface pluginInterface) {
-            this.PluginInterface = pluginInterface;
+        public Plugin() {
+            PluginInterface.Create<PartyListLayout>();
             Instance = this;
-            Task.Run(FFXIVClientStructs.Resolver.Initialize).ContinueWith((_) => {
-                if (isDisposed) return;
-                SecondInit();
+            Task.Run(FFXIVClientStructs.Resolver.Initialize)
+                .ContinueWith((_) => {
+                    if (isDisposed) return;
+                    Init();
             });
         }
 
-        public void OnConfigCommandHandler(object command, object args) {
+        public void OnConfigCommandHandler(string command, string args) {
+            OnConfig();
+        }
+
+        public void OnConfig() {
             ConfigWindow?.Toggle();
         }
     }

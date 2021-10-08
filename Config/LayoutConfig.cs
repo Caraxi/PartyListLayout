@@ -73,7 +73,7 @@ namespace PartyListLayout.Config {
 
         [SerializeKey(SerializeKey.CastbarText)]
         [LayoutElement(LayoutElementTab.MemberSlot, "Castbar Text", 12)]
-        public TextElementConfig CastbarText = new() { Color = new Vector4(1), Glow = Util.V4FromRgba(0xFF5B839D)};
+        public CastbarTextElementConfig CastbarText = new() { Color = new Vector4(1), Glow = Util.V4FromRgba(0xFF5B839D)};
 
         [SerializeKey(SerializeKey.Slot)]
         [LayoutElement(LayoutElementTab.MemberSlot, "Slot Number", 13)]

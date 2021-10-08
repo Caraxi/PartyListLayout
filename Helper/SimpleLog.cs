@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Dalamud.Logging;
 using Dalamud.Plugin;
 
 #if DEBUGNET5
@@ -18,31 +19,7 @@ namespace PartyListLayout.Helper {
             var p = Path.GetDirectoryName(callerPath);
             if (p != null) _subStrIndex = p.Length + 1;
         }
-#if DEBUGNET5
-        public static void Verbose(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Verbose($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
-        }
-
-        public static void Debug(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Debug($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
-        }
-
-        public static void Information(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Information($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {message}");
-        }
-
-        public static void Fatal(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Fatal($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
-        }
-
-        public static void Log(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Information($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
-        }
-
-        public static void Error(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
-            foreach (var m in SplitMessage(message)) PluginLog.Error($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
-        }
-#elif DEBUG
+#if DEBUG
         public static void Verbose(object message, [CallerFilePath] string callerPath = "", [CallerMemberName] string callerName = "", [CallerLineNumber] int lineNumber = -1) {
             foreach (var m in SplitMessage(message)) PluginLog.LogVerbose($"[{callerPath.Substring(_subStrIndex)}::{callerName}:{lineNumber}] {m}");
         }

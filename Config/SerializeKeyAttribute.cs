@@ -58,6 +58,8 @@ namespace PartyListLayout.Config {
         StatusEffectsReverseFill = 12020,
         StatusEffectsSeparation = 12030,
         StatusEffectsMax = 12040,
+
+        CastbarTextShowTarget = 13000,
     }
 
     public class SerializeKeyAttribute : Attribute {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Numerics;
 using System.Text;
 using FFXIVClientStructs.FFXIV.Client.Graphics;
@@ -74,6 +73,26 @@ namespace PartyListLayout {
             }
         }
 
+        private (byte x, byte y)[] partyListPositions;
+
+        public (byte x, byte y)[] PartyListPositions {
+            get {
+                if (partyListPositions == null) {
+                    partyListPositions = new (byte x, byte y)[16];
+
+                    byte x = 0;
+                    byte y = 0;
+
+                    for (var i = 0; i < partyListPositions.Length; i++) {
+                        partyListPositions[i] = (x, y);
+                        x++;
+                    }
+                }
+
+                return partyListPositions;
+            }
+        }
+
         private delegate void* PartyListOnUpdate(AddonPartyList* @this, void* numArrayData, void* stringArrayData);
         private HookWrapper<PartyListOnUpdate> partyListOnUpdateHook;
         
@@ -91,7 +110,7 @@ namespace PartyListLayout {
                 SimpleLog.Error(ex);
             }
 
-            plugin.PluginInterface.Framework.OnUpdateEvent += FrameworkUpdate;
+            Plugin.Framework.Update += FrameworkUpdate;
             Enabled = true;
         }
         
@@ -107,10 +126,10 @@ namespace PartyListLayout {
 
         public void Disable() {
             if (!Enabled) return;
-            plugin.PluginInterface.Framework.OnUpdateEvent -= FrameworkUpdate;
+            Plugin.Framework.Update -= FrameworkUpdate;
             if (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen) {
                 plugin.Config.PreviewMode = false;
-                FrameworkUpdate(plugin.PluginInterface.Framework);
+                FrameworkUpdate(Plugin.Framework);
             }
             partyListOnUpdateHook?.Disable();
             try {
@@ -119,14 +138,14 @@ namespace PartyListLayout {
                 SimpleLog.Error(ex);
             }
 
-            FrameworkUpdate(plugin.PluginInterface.Framework);
+            FrameworkUpdate(Plugin.Framework);
 
             Enabled = false;
         }
 
         private bool isPreviewing;
 
-        private void FrameworkUpdate(Dalamud.Game.Internal.Framework framework) {
+        private void FrameworkUpdate(Dalamud.Game.Framework framework) {
             if (!(plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen)) {
                 if (isPreviewing) {
                     isPreviewing = false;
@@ -221,13 +240,19 @@ namespace PartyListLayout {
             var maxX = 0;
             var maxY = 0;
 
+
+            for (var i = 0; i < partyList->MemberCount; i++) {
+                var pm = partyList->PartyMember[i];
+                var intList = partyIntList->PartyMember[i];
+                var stringList = partyStringList->PartyMembers[i];
+            }
+
+
             for (var i = 0; i < 13; i++) {
                 try {
                     var pm = i switch {
                         >= 0 and <= 7 => partyList->PartyMember[i],
-                        8 => partyList->Unknown08,
-                        9 => partyList->Unknown09,
-                        10 => partyList->Unknown10,
+                        >= 8 and <= 10 => partyList->TrustMember[i - 8],
                         11 => partyList->Chocobo,
                         12 => partyList->Pet,
                         _ => throw new ArgumentOutOfRangeException()
@@ -271,6 +296,7 @@ namespace PartyListLayout {
                     // 
                 }
             }
+
             
             // Collision Node Update
             partyList->AtkUnitBase.UldManager.NodeList[1]->SetWidth(reset ? (ushort)500 : (ushort) maxX);
@@ -423,8 +449,6 @@ namespace PartyListLayout {
                 }
             }
 
-
-
             if (reset) {
                 cNode->AtkResNode.SetPositionFloat(0, visibleIndex * 40);
             } else {
@@ -462,8 +486,6 @@ namespace PartyListLayout {
                     itcNode->AtkResNode.SetScale(1, 1);
                 }
 
-
-                
                 var (xSlot, ySlot) = reset ? (si, (byte)0) : StatusSlotPositions[si];
                 
                 var x = 263 + xSlot * ((25 + (reset ? 0 : CurrentLayout.StatusEffects.Separation.X)) * (reset ? 1 : CurrentLayout.StatusEffects.Scale.X));

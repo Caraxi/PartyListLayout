@@ -1,15 +1,17 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using Dalamud.Game.Text;
+using Dalamud.Utility;
 using ImGuiNET;
 using Newtonsoft.Json;
 using PartyListLayout.Converter;
 using PartyListLayout.Helper;
+using Util = PartyListLayout.Helper.Util;
 
 namespace PartyListLayout.Config {
     public unsafe class ConfigWindow {
@@ -42,14 +44,14 @@ namespace PartyListLayout.Config {
         public void Hide() {
             if (!isVisible) return;
             isVisible = false;
-            plugin.PluginInterface.UiBuilder.OnBuildUi -= DrawWindow;
+            Plugin.PluginInterface.UiBuilder.Draw -= DrawWindow;
             AutoSavePreset();
         }
 
         public void Show() {
             if (isVisible) return;
             isVisible = true;
-            plugin.PluginInterface.UiBuilder.OnBuildUi += DrawWindow;
+            Plugin.PluginInterface.UiBuilder.Draw += DrawWindow;
         }
 
         public void Toggle() {
@@ -324,11 +326,12 @@ namespace PartyListLayout.Config {
                     }
                     case Tabs.Presets: {
 
-                        var dirStr = plugin.PluginInterface.GetPluginConfigDirectory();
+                        var dirStr = Plugin.PluginInterface.GetPluginConfigDirectory();
                         var dirPath = new DirectoryInfo(Path.Combine(dirStr, "Presets"));
 
                         if (!dirPath.Exists) {
                             ImGui.TextColored(new Vector4(1, 0, 0, 1), "Preset Directory Missing");
+                            dirPath.Create();
                             break;
                         }
 
@@ -428,16 +431,16 @@ namespace PartyListLayout.Config {
                 try {
                     if (c) {
                         plugin.PartyListLayout.ConfigUpdated();
-                        plugin.PluginInterface.SavePluginConfig(Config);
+                        Plugin.PluginInterface.SavePluginConfig(Config);
                     }
                 } catch (Exception ex) {
                     SimpleLog.Error(ex);
                 }
 
                 ImGui.EndChild();
-                ImGui.End();
-            }
 
+            }
+            ImGui.End();
             if (!isOpen) {
                 Hide();
             }
@@ -476,7 +479,7 @@ namespace PartyListLayout.Config {
                 ImGui.TextWrapped($"{f.LastWriteTime.ToShortDateString()}  {f.LastWriteTime.ToShortTimeString()}");
                 ImGui.TableNextColumn();
 
-                if (plugin.PluginInterface.ClientState.KeyState[0x11]) {
+                if (Plugin.KeyState[0x11]) {
                     if (ImGui.SmallButton($"Delete Preset##{uid++}")) {
                         f.Delete();
                     }
@@ -506,7 +509,7 @@ namespace PartyListLayout.Config {
             if (plugin.Config.AutoSave) {
                 var json = GetConfigExport(true);
 
-                var dir = Path.Combine(plugin.PluginInterface.GetPluginConfigDirectory(), "Presets", "__AutoSave__");
+                var dir = Path.Combine(Plugin.PluginInterface.GetPluginConfigDirectory(), "Presets", "__AutoSave__");
                 var file = Path.Combine(dir, $"{DateTime.Now.ToFileTimeUtc()}{PresetFileSuffix}");
                 if (File.Exists(file)) return;
                 var dirInfo = new DirectoryInfo(dir);

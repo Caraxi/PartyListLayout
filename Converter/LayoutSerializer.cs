@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
-using Dalamud.Game.ClientState.Actors;
 using PartyListLayout.Config;
 using PartyListLayout.Helper;
 
