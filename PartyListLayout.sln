@@ -5,7 +5,6 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyListLayout", "PartyListLayout.csproj", "{FAF7F5F2-708A-4FEA-BAE7-F73A3438A0D5}"
 	ProjectSection(ProjectDependencies) = postProject
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA} = {DFE09922-8967-4638-A9BE-8898CD1B22EA}
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D} = {9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}
 	EndProjectSection
 EndProject
