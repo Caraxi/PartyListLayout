@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace PartyListLayout.GameStructs.NumberArray {
-    [StructLayout(LayoutKind.Sequential, Size = 519 * 4)]
+    [StructLayout(LayoutKind.Sequential, Size = 710 * 4)]
     public unsafe struct AddonPartyListIntArray {
         /* 000 */ public int Unknown000;
         /* 001 */ public int Unknown001;

@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyListLayout", "PartyLis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs", "lib\FFXIVClientStructs\FFXIVClientStructs\FFXIVClientStructs.csproj", "{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Common", "lib\FFXIVClientStructs\FFXIVClientStructs.Common\FFXIVClientStructs.Common.csproj", "{DFE09922-8967-4638-A9BE-8898CD1B22EA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVClientStructs.Generators", "lib\FFXIVClientStructs\FFXIVClientStructs.Generators\FFXIVClientStructs.Generators.csproj", "{AD042D86-973F-4C89-A764-DCD32E3D5ECD}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Release|x64.Build.0 = Debug|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{9BA8DAA0-AAF2-4D46-AB0A-1A51383A813D}.Debug|x64.Build.0 = Debug|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|x64.ActiveCfg = Debug|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Release|x64.Build.0 = Debug|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DFE09922-8967-4638-A9BE-8898CD1B22EA}.Debug|x64.Build.0 = Debug|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|x64.ActiveCfg = Debug|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Release|x64.Build.0 = Debug|Any CPU
 		{AD042D86-973F-4C89-A764-DCD32E3D5ECD}.Debug|x64.ActiveCfg = Debug|Any CPU

@@ -4,7 +4,7 @@ using PartyListLayout.Helper;
 
 namespace PartyListLayout.GameStructs.StringArray {
 
-    [StructLayout(LayoutKind.Sequential, Size = 0x570)]
+    [StructLayout(LayoutKind.Sequential, Size = 0x718)]
     public unsafe struct AddonPartyListStringArray {
 
         public byte* String000;
@@ -65,6 +65,7 @@ namespace PartyListLayout.GameStructs.StringArray {
 
     [StructLayout(LayoutKind.Sequential, Size = 0x68)]
     public unsafe struct AddonPartyListPartyMemberStrings {
+        public byte* PartyPositionLabel;
         private byte* playerNameAndLevel;
         public byte* String01;
         public byte* String02;

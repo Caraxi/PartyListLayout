@@ -220,7 +220,7 @@ namespace PartyListLayout {
         private void Update(AddonPartyList* partyList, bool reset = false) {
 
             if (partyList == null) return;
-            if (partyList->AtkUnitBase.UldManager.NodeListSize < 17) return;
+            if (partyList->AtkUnitBase.UldManager.NodeListSize < 21) return;
 
             var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
             var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
@@ -248,13 +248,13 @@ namespace PartyListLayout {
             }
 
 
-            for (var i = 0; i < 13; i++) {
+            for (var i = 0; i < 17; i++) {
                 try {
                     var pm = i switch {
                         >= 0 and <= 7 => partyList->PartyMember[i],
-                        >= 8 and <= 10 => partyList->TrustMember[i - 8],
-                        11 => partyList->Chocobo,
-                        12 => partyList->Pet,
+                        >= 8 and <= 14 => partyList->TrustMember[i - 8],
+                        15 => partyList->Chocobo,
+                        16 => partyList->Pet,
                         _ => throw new ArgumentOutOfRangeException()
                     };
 
