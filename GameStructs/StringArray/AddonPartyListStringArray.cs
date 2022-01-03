@@ -67,7 +67,6 @@ namespace PartyListLayout.GameStructs.StringArray {
     public unsafe struct AddonPartyListPartyMemberStrings {
         public byte* PartyPositionLabel;
         private byte* playerNameAndLevel;
-        public byte* String01;
         public byte* String02;
         public byte* String03;
         public byte* String04;

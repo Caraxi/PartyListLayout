@@ -62,9 +62,10 @@ namespace PartyListLayout.Helper {
         public static Vector4 V4FromRgba(uint rgba) => ImGui.ColorConvertU32ToFloat4(rgba);
 
         public static unsafe string ReadString(byte* stringPtr) {
+            if (stringPtr == null) return string.Empty;
             var l = 0;
             while (stringPtr[l] != 0) l++;
-            return Encoding.UTF8.GetString(stringPtr, l);
+            return l == 0 ? string.Empty : Encoding.UTF8.GetString(stringPtr, l);
         }
     }
 }
