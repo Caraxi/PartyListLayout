@@ -19,7 +19,7 @@ namespace PartyListLayout.GameStructs.NumberArray {
         /* 009 */ public AddonPartyListMembersIntArray PartyMember;
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 39 * 4 * 8)]
+    [StructLayout(LayoutKind.Sequential, Size = 41 * 4 * 8)]
     public unsafe struct AddonPartyListMembersIntArray {
         public AddonPartyListMemberIntArray Member0;
         public AddonPartyListMemberIntArray Member1;
@@ -60,7 +60,7 @@ namespace PartyListLayout.GameStructs.NumberArray {
         }
     }
     
-    [StructLayout(LayoutKind.Sequential, Size = 39 * 4)]
+    [StructLayout(LayoutKind.Sequential, Size = 41 * 4)]
     public unsafe struct AddonPartyListMemberIntArray {
         public int Level;
         public int ClassJobIcon;
@@ -97,6 +97,9 @@ namespace PartyListLayout.GameStructs.NumberArray {
         
         public int CastingPercent;
         public int ObjectID;
+
+        public int Unknown36;
+        public int Unknown37;
     }
 
     [StructLayout(LayoutKind.Sequential, Size = 4 * 10)]
