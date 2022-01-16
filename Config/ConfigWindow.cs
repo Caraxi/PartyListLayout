@@ -237,6 +237,7 @@ namespace PartyListLayout.Config {
                     if (ImGui.IsItemHovered()) ImGui.SetTooltip($"Load {plugin.Name} config from clipboard.");
                 }
 
+                /*
                 ImGui.SetCursorPos(p);
                 c |= ImGui.Checkbox("Preview", ref Config.PreviewMode);
                 if (ImGui.IsItemHovered()) ImGui.SetTooltip("Party list must not be hidden for preview to work.\nEither join a party or disable 'Hide party list when solo' in the character config.");
@@ -247,6 +248,7 @@ namespace PartyListLayout.Config {
                 }
 
                 ImGui.Separator();
+               */
 
                 ImGui.BeginChild("partyListLayout_scroll", new Vector2(-1, -1), false);
 
