@@ -17,57 +17,8 @@ namespace PartyListLayout.GameStructs.NumberArray {
         /* 008 */ public int Unknown008;
 
         /* 009 */ public AddonPartyListMembersIntArray PartyMember;
-        
-        /* 321 */ public int Unknown321;
-        /* 322 */ public OneHundredIntegers Unknowns322;
-        /* 422 */ public OneHundredIntegers Unknowns422;
-        /* 432 */ public TenIntegers Unknowns432;
-        /* 442 */ public TenIntegers Unknowns442;
-        /* 452 */ public TenIntegers Unknowns452;
-        /* 462 */ public TenIntegers Unknowns462;
-        /* 472 */ public TenIntegers Unknowns472;
-        /* 482 */ public TenIntegers Unknowns482;
-        /* 492 */ public TenIntegers Unknowns492;
-        /* 502 */ public TenIntegers Unknowns502;
-        /* 512 */ public TenIntegers Unknowns512;
-        /* 513 */ public int Unknown513;
-        /* 514 */ public int Unknown514;
-        /* 515 */ public int Unknown515;
-        /* 516 */ public int Unknown516;
-        /* 517 */ public int Unknown517;
-        /* 518 */ public int Unknown518;
-        /* 519 */ public int Unknown519;
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 10 * 4)]
-    public struct TenIntegers {
-        public int i0;
-        public int i1;
-        public int i2;
-        public int i3;
-        public int i4;
-        public int i5;
-        public int i6;
-        public int i7;
-        public int i8;
-        public int i9;
-    }
-
-    [StructLayout(LayoutKind.Sequential, Size = 100 * 4)]
-    public struct OneHundredIntegers {
-        public TenIntegers i0;
-        public TenIntegers i1;
-        public TenIntegers i2;
-        public TenIntegers i3;
-        public TenIntegers i4;
-        public TenIntegers i5;
-        public TenIntegers i6;
-        public TenIntegers i7;
-        public TenIntegers i8;
-        public TenIntegers i9;
-    }
-    
-    
     [StructLayout(LayoutKind.Sequential, Size = 39 * 4 * 8)]
     public unsafe struct AddonPartyListMembersIntArray {
         public AddonPartyListMemberIntArray Member0;
