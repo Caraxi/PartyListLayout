@@ -382,10 +382,11 @@ namespace PartyListLayout {
             if (c == null) return;
             c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)(CurrentLayout.SlotWidth * CurrentLayout.SelectionArea.Scale.X)); // Collision Node
             c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)(CurrentLayout.SlotHeight * CurrentLayout.SelectionArea.Scale.Y));
-            c->UldManager.NodeList[0]->SetPositionFloat(reset ? 16 : 46, reset ? 12 : 18);
+            c->UldManager.NodeList[0]->SetPositionFloat(reset ? 16 : 46 + CurrentLayout.SelectionArea.Position.X, reset ? 12 : 18 + CurrentLayout.SelectionArea.Position.Y);
 
             c->UldManager.NodeList[1]->SetWidth(reset ? (ushort)367 : (ushort)((CurrentLayout.SlotWidth - 5) * CurrentLayout.SelectionArea.Scale.X));
             c->UldManager.NodeList[1]->SetHeight(reset ? (ushort) 69 : (ushort)((CurrentLayout.SlotHeight + 9) * CurrentLayout.SelectionArea.Scale.Y));
+            c->UldManager.NodeList[1]->SetPositionFloat(reset ? 5 : 5 + CurrentLayout.SelectionArea.Position.X, reset ? -3 : -3 + CurrentLayout.SelectionArea.Position.Y);
 
 
             c->UldManager.NodeList[2]->SetWidth(reset ? (ushort)320 : (ushort)((CurrentLayout.SlotWidth  - 30) * CurrentLayout.SelectionArea.Scale.X));
@@ -430,7 +431,7 @@ namespace PartyListLayout {
             
             HandleElementConfig((AtkResNode*) memberStruct.Name, CurrentLayout.Name, reset, defPosX: 17, defText: (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen && !reset) ? $" Party{visibleIndex + 1} Member{ visibleIndex + 1}" : stringArray.PlayerNameAndLevel);
             HandleElementConfig((AtkResNode*) memberStruct.ClassJobIcon, CurrentLayout.ClassIcon, reset, defPosX: 24, defPosY: 18);
-            c->UldManager.NodeList[4]->SetPositionFloat(memberStruct.ClassJobIcon->AtkResNode.X - 21 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleX), memberStruct.ClassJobIcon->AtkResNode.Y - 13 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleY));
+            c->UldManager.NodeList[4]->SetPositionFloat((reset ? 0 : -CurrentLayout.SelectionArea.Position.X) + memberStruct.ClassJobIcon->AtkResNode.X - 21 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleX), (reset ? 0 : -CurrentLayout.SelectionArea.Position.Y) + memberStruct.ClassJobIcon->AtkResNode.Y - 13 * (reset ? 1 : memberStruct.ClassJobIcon->AtkResNode.ScaleY));
             c->UldManager.NodeList[4]->SetScale(memberStruct.ClassJobIcon->AtkResNode.ScaleX, memberStruct.ClassJobIcon->AtkResNode.ScaleY);
             HandleElementConfig((AtkResNode*) memberStruct.GroupSlotIndicator, CurrentLayout.Slot, reset);
             HandleElementConfig((AtkResNode*) memberStruct.CastingActionName, CurrentLayout.CastbarText, reset, defPosY: 10, defColor: DefaultLayout.CastbarText.Color, defGlow: DefaultLayout.CastbarText.Glow);

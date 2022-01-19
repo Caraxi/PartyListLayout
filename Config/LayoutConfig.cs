@@ -96,7 +96,7 @@ namespace PartyListLayout.Config {
         public StatusEffectsConfig StatusEffects = new();
 
         [SerializeKey(SerializeKey.SelectionArea)]
-        [LayoutElement(LayoutElementTab.MemberSlot, "Selection Area", 18, LayoutElementFlags.NoPosition | LayoutElementFlags.NoHide)]
+        [LayoutElement(LayoutElementTab.MemberSlot, "Selection Area", 18, LayoutElementFlags.NoHide)]
         public ElementConfig SelectionArea = new();
 
         [SerializeKey(SerializeKey.Version)]
