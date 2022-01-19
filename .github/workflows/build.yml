@@ -38,7 +38,7 @@ jobs:
 
       - name: Extract For Artifact
         run: |
-          Expand-Archive -Force ./bin/Release.ILMerge/PartyListLayout/latest.zip ./Artifact
+          Expand-Archive -Force ./bin/x64/Release.ILMerge/PartyListLayout/latest.zip ./Artifact
           
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v2.2.1
