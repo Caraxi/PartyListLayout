@@ -31,7 +31,7 @@ namespace PartyListLayout.Config {
         public Vector3 AddColor = new(0);
 
         public virtual void Editor(string name, ref bool c, PartyListLayout l = null) {
-            if (!EditorFlags.HasFlag(LayoutElementFlags.NoHide)) c |= ImGui.DragFloat2($"Position##{name}", ref Position);
+            if (!EditorFlags.HasFlag(LayoutElementFlags.NoPosition)) c |= ImGui.DragFloat2($"Position##{name}", ref Position);
             c |= ImGui.SliderFloat2($"Scale##{name}", ref Scale, 0, 5);
 
             if (EditorFlags.HasFlag(LayoutElementFlags.CanTint)) {
