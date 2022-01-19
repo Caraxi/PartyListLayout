@@ -535,7 +535,6 @@ namespace PartyListLayout {
                     var imageNode = (AtkImageNode*)itcNode->Component->UldManager.NodeList[1];
                     if (intArray.StatusEffect[si] == 0 || intArray.StatusEffectCount < (si + 1)) {
                         imageNode->LoadIconTexture(17861 + si, 0);
-                        intArray.StatusEffect[si] = 0;
                     }
                     imageNode->AtkResNode.ToggleVisibility(true);
                     itcNode->AtkResNode.ToggleVisibility(true);
