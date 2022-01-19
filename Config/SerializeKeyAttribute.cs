@@ -58,6 +58,7 @@ namespace PartyListLayout.Config {
         StatusEffectsReverseFill = 12020,
         StatusEffectsSeparation = 12030,
         StatusEffectsMax = 12040,
+        StatusEffectsReverseOrder = 12050,
 
         CastbarTextShowTarget = 13000,
     }

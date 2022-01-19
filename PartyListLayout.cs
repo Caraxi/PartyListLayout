@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using FFXIVClientStructs.FFXIV.Client.Graphics;
@@ -31,12 +32,12 @@ namespace PartyListLayout {
         public (byte x, byte y)[] StatusSlotPositions {
             get{
                 if (statusSlotPositions == null) {
-                    statusSlotPositions = new (byte x, byte y)[10];
+                    var newList = new List<(byte, byte)>();
                     byte xO = 0;
                     byte yO = 0;
-                    
-                    for (var i = 0; i < 10; i++) {
-                        statusSlotPositions[i] = (xO, yO);
+
+                    for (var i = 0; i < CurrentLayout.StatusEffects.MaxDisplayed; i++) {
+                        newList.Add((xO, yO));
                         if (CurrentLayout.StatusEffects.TwoLines && CurrentLayout.StatusEffects.ReverseFill) {
                             if (CurrentLayout.StatusEffects.Vertical) {
                                 xO++;
@@ -67,6 +68,10 @@ namespace PartyListLayout {
                             }
                         }
                     }
+
+                    if (CurrentLayout.StatusEffects.ReverseOrder) newList.Reverse();
+                    while(newList.Count < 10) newList.Add((0, 0));
+                    statusSlotPositions = newList.ToArray();
                 }
 
                 return statusSlotPositions;

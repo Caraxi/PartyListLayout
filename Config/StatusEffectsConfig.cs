@@ -18,6 +18,9 @@ namespace PartyListLayout.Config {
 
         [SerializeKey(SerializeKey.StatusEffectsMax)]
         public int MaxDisplayed = 10;
+
+        [SerializeKey(SerializeKey.StatusEffectsReverseOrder)]
+        public bool ReverseOrder;
         
         public override void Editor(string name, ref bool c, PartyListLayout l = null) {
             base.Editor(name, ref c, l);
@@ -27,6 +30,8 @@ namespace PartyListLayout.Config {
             if (MaxDisplayed > 10) MaxDisplayed = 10;
 
             c |= ImGui.Checkbox($"Vertical##{name}", ref Vertical);
+            ImGui.SameLine();
+            c |= ImGui.Checkbox($"Reverse Order##{name}", ref ReverseOrder);
             ImGui.SameLine();
             c |= ImGui.Checkbox($"Two Lines##{name}", ref TwoLines);
             if (TwoLines) {
