@@ -10,6 +10,8 @@ using Dalamud.Utility;
 using ImGuiNET;
 using Newtonsoft.Json;
 using PartyListLayout.Converter;
+using PartyListLayout.GameStructs.NumberArray;
+using PartyListLayout.GameStructs.StringArray;
 using PartyListLayout.Helper;
 using Util = PartyListLayout.Helper.Util;
 
@@ -237,7 +239,7 @@ namespace PartyListLayout.Config {
                     if (ImGui.IsItemHovered()) ImGui.SetTooltip($"Load {plugin.Name} config from clipboard.");
                 }
 
-                /*
+
                 ImGui.SetCursorPos(p);
                 c |= ImGui.Checkbox("Preview", ref Config.PreviewMode);
                 if (ImGui.IsItemHovered()) ImGui.SetTooltip("Party list must not be hidden for preview to work.\nEither join a party or disable 'Hide party list when solo' in the character config.");
@@ -248,7 +250,7 @@ namespace PartyListLayout.Config {
                 }
 
                 ImGui.Separator();
-               */
+
 
                 ImGui.BeginChild("partyListLayout_scroll", new Vector2(-1, -1), false);
 
@@ -422,7 +424,19 @@ namespace PartyListLayout.Config {
                         c |= ImGui.Checkbox("Hide Ko-fi Button", ref plugin.Config.HideKofi);
 
 
+#if DEBUG
+                        var atkArrayDataHolder = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+                        var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
+                        var partyListStrings = atkArrayDataHolder.StringArrays[3];
+                        var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;
+                        var partyStringList = (AddonPartyListStringArray*)partyListStrings->StringArray;
 
+                        try {
+                            Dalamud.Utility.Util.ShowStruct(partyIntList);
+                        } catch (Exception ex) {
+                            ImGui.Text($"{ex}");
+                        }
+#endif
                         break;
                     }
                 }

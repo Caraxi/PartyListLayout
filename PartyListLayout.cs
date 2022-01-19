@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using System.Text;
 using FFXIVClientStructs.FFXIV.Client.Graphics;
@@ -98,7 +99,7 @@ namespace PartyListLayout {
             }
         }
 
-        private delegate void* PartyListOnUpdate(AddonPartyList* @this, void* numArrayData, void* stringArrayData);
+        private delegate void* PartyListOnUpdate(AddonPartyList* @this, NumberArrayData* numArrayData, StringArrayData* stringArrayData);
         private HookWrapper<PartyListOnUpdate> partyListOnUpdateHook;
         
         
@@ -119,7 +120,7 @@ namespace PartyListLayout {
             Enabled = true;
         }
         
-        private void* PartyListUpdateDetour(AddonPartyList* @this, void* a2, void* a3) {
+        private void* PartyListUpdateDetour(AddonPartyList* @this, NumberArrayData* a2, StringArrayData* a3) {
             var ret = partyListOnUpdateHook.Original(@this, a2, a3);
             try {
                 Update(@this);
@@ -153,12 +154,14 @@ namespace PartyListLayout {
         private void FrameworkUpdate(Dalamud.Game.Framework framework) {
             if (!(plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen)) {
                 if (isPreviewing) {
+                    SimpleLog.Log("Preview Mode Disabled");
+                    CleanupPreview();
                     isPreviewing = false;
                 } else {
                     return;
                 }
             }
-            isPreviewing = true;
+            if (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen) isPreviewing = true;
             var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
 
             var addon = Common.GetUnitBase<AddonPartyList>();
@@ -167,7 +170,11 @@ namespace PartyListLayout {
             }
         }
 
-        private void SetupPreview(AddonPartyList* partyList, AddonPartyListIntArray* intArray) {
+        private readonly Stopwatch previewTickStopwatch = new();
+
+        private void SetupPreview(AddonPartyList* partyList, AddonPartyListIntArray* intArray, AddonPartyListStringArray* stringArray) {
+            if (!previewTickStopwatch.IsRunning) previewTickStopwatch.Start();
+            var previewtickCountCounter = (int) (previewTickStopwatch.ElapsedMilliseconds % int.MaxValue);
             var ia = (AddonPartyListMemberIntArray*) &intArray->PartyMember;
             for (var i = intArray->PartyMemberCount; i < 8 && i < plugin.Config.PreviewCount; i++) {
                 var m = partyList->PartyMember[i];
@@ -176,6 +183,8 @@ namespace PartyListLayout {
                 m.PartyMemberComponent->OwnerNode->AtkResNode.ToggleVisibility(true);
 
                 m.Name->SetText($" Party Member'{i+1}");
+
+                m.PartyMemberComponent->OwnerNode->AtkResNode.Color.A = 255;
 
                 m.Name->AtkResNode.ToggleVisibility(i % 2 == 0 || CurrentLayout.Name.KeepVisibleWhileCasting);
 
@@ -190,7 +199,7 @@ namespace PartyListLayout {
                     var nodeList = m.StatusIcon[j]->AtkComponentBase.UldManager.NodeList;
                     nodeList[0]->ToggleVisibility(false);
                     nodeList[1]->ToggleVisibility(true);
-                    if (intArray->PartyMember[i].StatusEffect[j] == 0) nodeList[1]->GetAsAtkImageNode()->LoadIconTexture(10205, 0);
+                    nodeList[1]->GetAsAtkImageNode()->LoadIconTexture(17861 + j, 0);
                 }
 
                 for (var j = 0; j < m.PartyMemberComponent->UldManager.NodeListSize; j++) {
@@ -205,7 +214,7 @@ namespace PartyListLayout {
                         }
                         case 8: {
                             n->ToggleVisibility(true);
-                            n->SetScale((Environment.TickCount / (7 * i) % 100) / 100f, 1f);
+                            n->SetScale((previewtickCountCounter / (7 * i) % 100) / 100f, 1f);
                             break;
                         }
                         case 9: {
@@ -217,7 +226,30 @@ namespace PartyListLayout {
 
 
 
-                ia[i].CastingPercent = Environment.TickCount / (8 + i) % 100;
+                ia[i].CastingPercent = previewtickCountCounter / (8 + i) % 100;
+
+            }
+        }
+
+        private void CleanupPreview() {
+            var addon = Common.GetUnitBase<AddonPartyList>();
+            if (addon == null) return;
+            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+            var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
+            var partyListStrings = atkArrayDataHolder.StringArrays[3];
+            var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;
+            var partyStringList = (AddonPartyListStringArray*)partyListStrings->StringArray;
+
+            for (var p = 0; p < 8; p++) {
+
+                // Reload all the status effect icons
+                for (var s = 0; s < 10; s++) {
+                    var siComponent = addon->PartyMember[p].StatusIcon[s];
+                    if (siComponent == null) continue;
+                    var itcNode = siComponent->AtkComponentBase.OwnerNode;
+                    var icon = (AtkImageNode*)itcNode->Component->UldManager.NodeList[1];
+                    icon->LoadIconTexture(partyIntList->PartyMember[p].StatusEffect[s], 0);
+                }
             }
         }
 
@@ -234,7 +266,7 @@ namespace PartyListLayout {
             var partyStringList = (AddonPartyListStringArray*)partyListStrings->StringArray;
 
             if (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen && !reset) {
-                SetupPreview(partyList, partyIntList);
+                SetupPreview(partyList, partyIntList, partyStringList);
             }
 
             HandleElementConfig((AtkResNode*) partyList->PartyTypeTextNode, reset ? DefaultLayout.PartyTypeText : CurrentLayout.PartyTypeText, false);
@@ -385,7 +417,7 @@ namespace PartyListLayout {
         private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, AddonPartyListPartyMemberStrings stringArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
             var c = cNode->Component;
             if (c == null) return;
-            c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)(CurrentLayout.SlotWidth * CurrentLayout.SelectionArea.Scale.X)); // Collision Node
+            c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)((CurrentLayout.SlotWidth - 30) * CurrentLayout.SelectionArea.Scale.X)); // Collision Node
             c->UldManager.NodeList[0]->SetHeight(reset ? (ushort) 44 : (ushort)(CurrentLayout.SlotHeight * CurrentLayout.SelectionArea.Scale.Y));
             c->UldManager.NodeList[0]->SetPositionFloat(reset ? 16 : 46 + CurrentLayout.SelectionArea.Position.X, reset ? 12 : 18 + CurrentLayout.SelectionArea.Position.Y);
 
@@ -501,7 +533,10 @@ namespace PartyListLayout {
 
                 if ((plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen) && !itcNode->AtkResNode.IsVisible) {
                     var imageNode = (AtkImageNode*)itcNode->Component->UldManager.NodeList[1];
-                    if (intArray.StatusEffect[si] == 0) imageNode->LoadIconTexture(10205, 0);
+                    if (intArray.StatusEffect[si] == 0 || intArray.StatusEffectCount < (si + 1)) {
+                        imageNode->LoadIconTexture(17861 + si, 0);
+                        intArray.StatusEffect[si] = 0;
+                    }
                     imageNode->AtkResNode.ToggleVisibility(true);
                     itcNode->AtkResNode.ToggleVisibility(true);
                 }
