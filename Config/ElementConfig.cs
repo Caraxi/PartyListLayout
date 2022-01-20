@@ -18,7 +18,7 @@ namespace PartyListLayout.Config {
         [SerializeKey(SerializeKey.ElementPosition, ExcludeFlag = LayoutElementFlags.NoPosition)]
         public Vector2 Position = new(0);
 
-        [SerializeKey(SerializeKey.ElementScale)]
+        [SerializeKey(SerializeKey.ElementScale, ExcludeFlag = LayoutElementFlags.NoScale)]
         public Vector2 Scale = new(1);
 
         public bool ShouldSerializeMultiplyColor() => EditorFlags.HasFlag(LayoutElementFlags.CanTint);
@@ -32,7 +32,7 @@ namespace PartyListLayout.Config {
 
         public virtual void Editor(string name, ref bool c, PartyListLayout l = null) {
             if (!EditorFlags.HasFlag(LayoutElementFlags.NoPosition)) c |= ImGui.DragFloat2($"Position##{name}", ref Position);
-            c |= ImGui.SliderFloat2($"Scale##{name}", ref Scale, 0, 5);
+            if (!EditorFlags.HasFlag(LayoutElementFlags.NoScale)) c |= ImGui.SliderFloat2($"Scale##{name}", ref Scale, 0, 5);
 
             if (EditorFlags.HasFlag(LayoutElementFlags.CanTint)) {
                 c |= ImGui.ColorEdit3($"Tint (Multiply)##{name}", ref MultiplyColor, ImGuiColorEditFlags.Uint8);

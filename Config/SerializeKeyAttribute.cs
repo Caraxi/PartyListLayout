@@ -14,6 +14,7 @@ namespace PartyListLayout.Config {
         // Party Grid ElementConfigs
         ClickableArea = 2000,
         PartyTypeText = 2010,
+        Background = 2020,
 
         // Member Slot ElementConfigs
         Name = 3000,
@@ -61,6 +62,10 @@ namespace PartyListLayout.Config {
         StatusEffectsReverseOrder = 12050,
 
         CastbarTextShowTarget = 13000,
+
+        // BackgroundElementConfig
+        BackgroundPadding = 14000,
+        BackgroundColor = 14010,
     }
 
     public class SerializeKeyAttribute : Attribute {

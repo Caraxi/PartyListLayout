@@ -340,7 +340,41 @@ namespace PartyListLayout {
             partyList->AtkUnitBase.UldManager.NodeList[1]->SetHeight(reset ? (ushort)480 : (ushort) maxY);
             
             // Background Update
-            partyList->AtkUnitBase.UldManager.NodeList[3]->ToggleVisibility(reset);
+            var backgroundWidth = 288f;
+            var backgroundHeight = 56f;
+            var backgroundX = 12f;
+            var backgroundY = 20f;
+            if (!reset) {
+                backgroundWidth = maxX;
+                backgroundHeight = maxY;
+
+                backgroundX += CurrentLayout.Background.Position.X;
+                backgroundY += CurrentLayout.Background.Position.Y;
+
+                backgroundWidth += (CurrentLayout.Background.Padding.X * 2);
+                backgroundHeight += (CurrentLayout.Background.Padding.Y * 2);
+
+                backgroundX -= CurrentLayout.Background.Padding.X;
+                backgroundY -= CurrentLayout.Background.Padding.Y;
+
+                if (backgroundWidth < 0) backgroundWidth = 0;
+                if (backgroundHeight < 0) backgroundHeight = 0;
+                if (backgroundWidth > ushort.MaxValue) backgroundWidth = ushort.MaxValue;
+                if (backgroundHeight > ushort.MaxValue) backgroundHeight = ushort.MaxValue;
+            }
+
+            partyList->AtkUnitBase.UldManager.NodeList[3]->SetPositionFloat(backgroundX, backgroundY);
+
+            partyList->AtkUnitBase.UldManager.NodeList[3]->SetWidth((ushort)backgroundWidth);
+            partyList->AtkUnitBase.UldManager.NodeList[3]->SetHeight((ushort)backgroundHeight);
+
+            var add = reset ? new Vector3(0) : CurrentLayout.Background.BackgroundColor;
+            partyList->AtkUnitBase.UldManager.NodeList[3]->AddRed = (ushort)(add.X * 255);
+            partyList->AtkUnitBase.UldManager.NodeList[3]->AddGreen = (ushort)(add.Y * 255);
+            partyList->AtkUnitBase.UldManager.NodeList[3]->AddBlue = (ushort)(add.Z * 255);
+
+
+            partyList->AtkUnitBase.UldManager.NodeList[3]->ToggleVisibility(reset || !CurrentLayout.Background.Hide);
         }
 
         private ByteColor GetColor(Vector4 vector4) {
