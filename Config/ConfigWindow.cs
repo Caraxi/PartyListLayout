@@ -425,7 +425,7 @@ namespace PartyListLayout.Config {
 
 
 #if DEBUG
-                        var atkArrayDataHolder = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+                        var atkArrayDataHolder = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->AtkModule.AtkArrayDataHolder;
                         var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
                         var partyListStrings = atkArrayDataHolder.StringArrays[3];
                         var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;

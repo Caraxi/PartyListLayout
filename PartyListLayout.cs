@@ -162,7 +162,7 @@ namespace PartyListLayout {
                 }
             }
             if (plugin.Config.PreviewMode && plugin.ConfigWindow.IsOpen) isPreviewing = true;
-            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->AtkModule.AtkArrayDataHolder;
 
             var addon = Common.GetUnitBase<AddonPartyList>();
             if (addon != null) {
@@ -234,7 +234,7 @@ namespace PartyListLayout {
         private void CleanupPreview() {
             var addon = Common.GetUnitBase<AddonPartyList>();
             if (addon == null) return;
-            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->AtkModule.AtkArrayDataHolder;
             var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
             var partyListStrings = atkArrayDataHolder.StringArrays[3];
             var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;
@@ -259,7 +259,7 @@ namespace PartyListLayout {
             if (partyList == null) return;
             if (partyList->AtkUnitBase.UldManager.NodeListSize < 21) return;
 
-            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->RaptureAtkModule.AtkModule.AtkArrayDataHolder;
+            var atkArrayDataHolder = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->AtkModule.AtkArrayDataHolder;
             var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
             var partyListStrings = atkArrayDataHolder.StringArrays[3];
             var partyIntList = (AddonPartyListIntArray*) partyListNumbers->IntArray;
