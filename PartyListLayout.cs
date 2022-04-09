@@ -313,7 +313,7 @@ namespace PartyListLayout {
                     if (cNode->AtkResNode.IsVisible || reset) UpdateSlot(cNode, visibleIndex, pm, intList, stringList, ref maxX, ref maxY, reset);
                     if (cNode->AtkResNode.IsVisible) visibleIndex++;
 
-                    if (i == 11) {
+                    if (i == 15) {
                         partyList->MpBarSpecialResNode->SetPositionFloat(153 + cNode->AtkResNode.X, 60 + cNode->AtkResNode.Y);
                         var cTextNode = partyList->MpBarSpecialResNode->ChildNode;
                         HandleElementConfig(cTextNode, CurrentLayout.ChocoboTimer, reset, defColor: DefaultLayout.ChocoboTimer.Color, defGlow: DefaultLayout.ChocoboTimer.Glow);
