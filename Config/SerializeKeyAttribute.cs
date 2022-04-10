@@ -66,6 +66,7 @@ namespace PartyListLayout.Config {
         // BackgroundElementConfig
         BackgroundPadding = 14000,
         BackgroundColor = 14010,
+        BackgroundOpacity = 14020,
     }
 
     public class SerializeKeyAttribute : Attribute {

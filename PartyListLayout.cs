@@ -372,7 +372,7 @@ namespace PartyListLayout {
             partyList->AtkUnitBase.UldManager.NodeList[3]->AddRed = (ushort)(add.X * 255);
             partyList->AtkUnitBase.UldManager.NodeList[3]->AddGreen = (ushort)(add.Y * 255);
             partyList->AtkUnitBase.UldManager.NodeList[3]->AddBlue = (ushort)(add.Z * 255);
-
+            partyList->AtkUnitBase.UldManager.NodeList[3]->Color.A = (byte)(255 * (reset ? 1f : CurrentLayout.Background.BackgroundOpacity));
 
             partyList->AtkUnitBase.UldManager.NodeList[3]->ToggleVisibility(reset || !CurrentLayout.Background.Hide);
         }
