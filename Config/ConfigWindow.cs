@@ -309,6 +309,7 @@ namespace PartyListLayout.Config {
                         ImGui.Indent();
                         c |= ImGui.Checkbox("Fill Rows First?", ref Config.CurrentLayout.ReverseFill);
                         c |= ImGui.SliderInt($"{(Config.CurrentLayout.ReverseFill ? "Column" : "Row")} Count###columnCount", ref Config.CurrentLayout.Columns, 1, 8);
+                        c |= ImGui.Checkbox("Grow List Upwards", ref Config.CurrentLayout.GrowUp);
                         ImGui.Unindent();
 
                         ImGui.Text("Sizing:");
@@ -317,6 +318,10 @@ namespace PartyListLayout.Config {
                         c |= ImGui.SliderInt("Height", ref Config.CurrentLayout.SlotHeight, 5, 160);
                         ImGui.Unindent();
 
+                        
+
+                        ImGui.Separator();
+                        
                         foreach (var a in layoutOptions.Where(a => a.attr.Tab == LayoutElementTab.PartyGrid)) {
                             ElementConfigEditor(a.attr.Name, (ElementConfig) a.field.GetValue(Config.CurrentLayout), (ElementConfig) a.field.GetValue(LayoutConfig.Default), ref c, a.attr.Flags);
                         }

@@ -10,6 +10,7 @@ namespace PartyListLayout.Config {
         Columns = 1010,
         SlotWidth = 1020,
         SlotHeight = 1030,
+        GrowUp = 1040,
 
         // Party Grid ElementConfigs
         ClickableArea = 2000,

@@ -276,6 +276,8 @@ namespace PartyListLayout {
 
             var maxX = 0;
             var maxY = 0;
+            var minX = 0;
+            var minY = 0;
 
 
             for (var i = 0; i < partyList->MemberCount; i++) {
@@ -310,7 +312,7 @@ namespace PartyListLayout {
                     var cNode = c->OwnerNode;
                     if (cNode == null) continue;
                     
-                    if (cNode->AtkResNode.IsVisible || reset) UpdateSlot(cNode, visibleIndex, pm, intList, stringList, ref maxX, ref maxY, reset);
+                    if (cNode->AtkResNode.IsVisible || reset) UpdateSlot(cNode, visibleIndex, pm, intList, stringList, ref maxX, ref maxY, ref minX, ref minY, reset);
                     if (cNode->AtkResNode.IsVisible) visibleIndex++;
 
                     if (i == 15) {
@@ -336,8 +338,9 @@ namespace PartyListLayout {
 
             
             // Collision Node Update
-            partyList->AtkUnitBase.UldManager.NodeList[1]->SetWidth(reset ? (ushort)500 : (ushort) maxX);
-            partyList->AtkUnitBase.UldManager.NodeList[1]->SetHeight(reset ? (ushort)480 : (ushort) maxY);
+            partyList->AtkUnitBase.UldManager.NodeList[1]->SetWidth(reset ? (ushort)500 : (ushort) (maxX - minX));
+            partyList->AtkUnitBase.UldManager.NodeList[1]->SetHeight(reset ? (ushort)480 : (ushort) (maxY - minY));
+            partyList->AtkUnitBase.UldManager.NodeList[1]->SetPositionFloat(minX, minY);
             
             // Background Update
             var backgroundWidth = 288f;
@@ -448,7 +451,7 @@ namespace PartyListLayout {
             }
         }
 
-        private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, AddonPartyListPartyMemberStrings stringArray, ref int maxX, ref int maxY, bool reset, int? forceColumnCount = null) {
+        private void UpdateSlot(AtkComponentNode* cNode, int visibleIndex, AddonPartyList.PartyListMemberStruct memberStruct, AddonPartyListMemberIntArray intArray, AddonPartyListPartyMemberStrings stringArray, ref int maxX, ref int maxY, ref int minX, ref int minY, bool reset, int? forceColumnCount = null) {
             var c = cNode->Component;
             if (c == null) return;
             c->UldManager.NodeList[0]->SetWidth(reset ? (ushort)366 : (ushort)((CurrentLayout.SlotWidth - 30) * CurrentLayout.SelectionArea.Scale.X)); // Collision Node
@@ -534,6 +537,11 @@ namespace PartyListLayout {
                 } else {
                     rowIndex = visibleIndex % columnCount;
                     columnIndex = visibleIndex / columnCount;
+                }
+
+                if (CurrentLayout.GrowUp) {
+                    rowIndex = -rowIndex;
+                    minY = rowIndex * CurrentLayout.SlotHeight - 16;
                 }
 
                 cNode->AtkResNode.SetPositionFloat(columnIndex * CurrentLayout.SlotWidth, rowIndex * CurrentLayout.SlotHeight);

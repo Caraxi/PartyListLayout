@@ -21,6 +21,9 @@ namespace PartyListLayout.Config {
         [SerializeKey(SerializeKey.SlotHeight)]
         public int SlotHeight = 44;
 
+        [SerializeKey(SerializeKey.GrowUp)]
+        public bool GrowUp = false;
+
         // Party Grid
         [SerializeKey(SerializeKey.PartyTypeText)]
         [LayoutElement(LayoutElementTab.PartyGrid, "Party Type Text", 1)]
