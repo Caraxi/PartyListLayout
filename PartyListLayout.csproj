@@ -14,7 +14,7 @@
     </PropertyGroup>
     <PropertyGroup Label="Feature">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Version>0.3.3.0</Version>
+        <Version>0.3.4.0</Version>
     </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
         <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
@@ -61,7 +61,7 @@
         </Reference>
     </ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="DalamudPackager" Version="2.1.5" />
+	  <PackageReference Include="DalamudPackager" Version="2.1.6" />
 	  <PackageReference Include="ILRepack" Version="2.1.0-beta1" />
 	</ItemGroup>
     <Target Name="ILRepack" AfterTargets="PostBuildEvent">
