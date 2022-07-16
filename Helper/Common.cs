@@ -29,7 +29,7 @@ namespace PartyListLayout.Helper {
 
         public static HookWrapper<T> Hook<T>(string signature, T detour, bool enable = true, int addressOffset = 0) where T : Delegate {
             var addr = Plugin.SigScanner.ScanText(signature);
-            var h = new Hook<T>(addr + addressOffset, detour);
+            var h = Dalamud.Hooking.Hook<T>.FromAddress(addr + addressOffset, detour);
             var wh = new HookWrapper<T>(h);
             if (enable) wh.Enable();
             HookList.Add(wh);

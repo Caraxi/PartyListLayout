@@ -14,7 +14,7 @@
     </PropertyGroup>
     <PropertyGroup Label="Feature">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Version>0.3.4.0</Version>
+        <Version>0.3.4.1</Version>
     </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
         <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
@@ -36,8 +36,8 @@
             <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
         </Reference>
         <Reference Include="FFXIVClientStructs">
-            <Private>true</Private>
-            <HintPath>$(SolutionDir)lib\FFXIVClientStructs\bin\$(ConfigurationName)\FFXIVClientStructs.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
         </Reference>
         <Reference Include="Newtonsoft.Json">
             <Private>false</Private>
@@ -62,14 +62,5 @@
     </ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="DalamudPackager" Version="2.1.6" />
-	  <PackageReference Include="ILRepack" Version="2.1.0-beta1" />
 	</ItemGroup>
-    <Target Name="ILRepack" AfterTargets="PostBuildEvent">
-        <ItemGroup>
-            <InputAssemblies Include="$(TargetPath)" />
-            <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
-        </ItemGroup>
-        <Exec Command="$(PkgILRepack)\tools\ILRepack.exe /lib:$(AppData)\XIVLauncher\addon\Hooks\dev /out:$(TargetDir)..\$(Configuration).ILMerge\$(TargetFileName) @(InputAssemblies, ' ')" />
-    </Target>
-    
 </Project>

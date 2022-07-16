@@ -92,14 +92,14 @@ namespace PartyListLayout.Config {
             if (eCfg.Hide) {
                 ImGui.SameLine();
                 var s = ImGui.CalcTextSize("Hidden ");
-                ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - s.X);
+                ImGui.SetCursorPosX(ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X - s.X);
                 ImGui.PushStyleColor(ImGuiCol.Text, 0xFF4444FF);
                 ImGui.Text("Hidden");
                 ImGui.PopStyleColor();
             }
 
             if (isOpen) {
-                ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - ImGui.CalcTextSize("Default").X - 13 * ImGui.GetIO().FontGlobalScale);
+                ImGui.SetCursorPosX(ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X - ImGui.CalcTextSize("Default").X - 13 * ImGui.GetIO().FontGlobalScale);
 
                 ImGui.PushStyleColor(ImGuiCol.Button, 0xAA00FFFF);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, 0xCC00FFFF);
@@ -177,14 +177,14 @@ namespace PartyListLayout.Config {
 
                 if (!string.IsNullOrEmpty(importError)) {
                     if (!errorStopwatch.IsRunning) errorStopwatch.Restart();
-                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - (ImGui.CalcTextSize(importError).X + 5));
+                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X - (ImGui.CalcTextSize(importError).X + 5));
                     ImGui.TextColored(new Vector4(1, 0, 0, 1), importError);
                     if (errorStopwatch.ElapsedMilliseconds > 5000) {
                         importError = string.Empty;
                         errorStopwatch.Stop();
                     }
                 } else {
-                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionWidth() - (230 * ImGui.GetIO().FontGlobalScale));
+                    ImGui.SetCursorPosX(ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X - (230 * ImGui.GetIO().FontGlobalScale));
 
                     if (!Config.HideKofi) {
                         var buttonText = "Support on Ko-fi";
@@ -265,7 +265,7 @@ namespace PartyListLayout.Config {
 
                 var first = true;
                 var firstRight = true;
-                var alignRightPos = ImGui.GetWindowContentRegionWidth();
+                var alignRightPos = ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X;
 
                 foreach (var t in (Tabs[])Enum.GetValues(typeof(Tabs))) {
                     var attr = t.GetAttribute<TabAttribute>();
