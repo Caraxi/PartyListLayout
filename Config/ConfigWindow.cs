@@ -441,6 +441,14 @@ namespace PartyListLayout.Config {
                         } catch (Exception ex) {
                             ImGui.Text($"{ex}");
                         }
+
+                        try {
+                            Dalamud.Utility.Util.ShowStruct(partyStringList);
+                        } catch (Exception ex) {
+                            ImGui.Text($"{ex}");
+                        }
+                        
+                        
 #endif
                         break;
                     }
