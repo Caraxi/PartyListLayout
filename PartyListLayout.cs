@@ -258,6 +258,7 @@ namespace PartyListLayout {
 
             if (partyList == null) return;
             if (partyList->AtkUnitBase.UldManager.NodeListSize < 21) return;
+            var nodes = new PartyListNodes(partyList);
 
             var atkArrayDataHolder = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->AtkModule.AtkArrayDataHolder;
             var partyListNumbers = atkArrayDataHolder.NumberArrays[4];
@@ -366,18 +367,18 @@ namespace PartyListLayout {
                 if (backgroundHeight > ushort.MaxValue) backgroundHeight = ushort.MaxValue;
             }
 
-            partyList->AtkUnitBase.UldManager.NodeList[3]->SetPositionFloat(backgroundX, backgroundY);
+            nodes.PartyBackground->AtkResNode.SetPositionFloat(backgroundX, backgroundY);
 
-            partyList->AtkUnitBase.UldManager.NodeList[3]->SetWidth((ushort)backgroundWidth);
-            partyList->AtkUnitBase.UldManager.NodeList[3]->SetHeight((ushort)backgroundHeight);
+            nodes.PartyBackground->AtkResNode.SetWidth((ushort)backgroundWidth);
+            nodes.PartyBackground->AtkResNode.SetHeight((ushort)backgroundHeight);
 
             var add = reset ? new Vector3(0) : CurrentLayout.Background.BackgroundColor;
-            partyList->AtkUnitBase.UldManager.NodeList[3]->AddRed = (ushort)(add.X * 255);
-            partyList->AtkUnitBase.UldManager.NodeList[3]->AddGreen = (ushort)(add.Y * 255);
-            partyList->AtkUnitBase.UldManager.NodeList[3]->AddBlue = (ushort)(add.Z * 255);
-            partyList->AtkUnitBase.UldManager.NodeList[3]->Color.A = (byte)(255 * (reset ? 1f : CurrentLayout.Background.BackgroundOpacity));
+            nodes.PartyBackground->AtkResNode.AddRed = (ushort)(add.X * 255);
+            nodes.PartyBackground->AtkResNode.AddGreen = (ushort)(add.Y * 255);
+            nodes.PartyBackground->AtkResNode.AddBlue = (ushort)(add.Z * 255);
+            nodes.PartyBackground->AtkResNode.Color.A = (byte)(255 * (reset ? 1f : CurrentLayout.Background.BackgroundOpacity));
 
-            partyList->AtkUnitBase.UldManager.NodeList[3]->ToggleVisibility(reset || !CurrentLayout.Background.Hide);
+            nodes.PartyBackground->AtkResNode.ToggleVisibility(reset || !CurrentLayout.Background.Hide);
         }
 
         private ByteColor GetColor(Vector4 vector4) {
