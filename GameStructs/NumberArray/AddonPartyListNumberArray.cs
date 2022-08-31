@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace PartyListLayout.GameStructs.NumberArray {
-    [StructLayout(LayoutKind.Sequential, Size = 710 * 4)]
+    [StructLayout(LayoutKind.Sequential, Size = 727 * 4)]
     public unsafe struct AddonPartyListIntArray {
         /* 000 */ public int Unknown000;
         /* 001 */ public int Unknown001;
@@ -19,7 +19,7 @@ namespace PartyListLayout.GameStructs.NumberArray {
         /* 009 */ public AddonPartyListMembersIntArray PartyMember;
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 41 * 4 * 8)]
+    [StructLayout(LayoutKind.Sequential, Size = 42 * 4 * 8)]
     public unsafe struct AddonPartyListMembersIntArray {
         public AddonPartyListMemberIntArray Member0;
         public AddonPartyListMemberIntArray Member1;
@@ -60,46 +60,41 @@ namespace PartyListLayout.GameStructs.NumberArray {
         }
     }
     
-    [StructLayout(LayoutKind.Sequential, Size = 41 * 4)]
+    [StructLayout(LayoutKind.Sequential, Size = 42 * 4)]
     public unsafe struct AddonPartyListMemberIntArray {
-        public int Level;
-        public int ClassJobIcon;
-
-        public int Unknown2;
-            
-        public int HP;
-        public int HPMax;
-        public int ShieldPercentage;
-        public int MP;
-        public int MPMax;
-
-        public int Unknown8;
-        public int Unknown9;
-        
-        public int PartySlot;
-
-        public int Unknown11;
-        public int Unknown12;
-        
-        public int StatusEffectCount;
-        public AddonPartyListMemberStatusEffectsIntArray StatusEffect;
-
-        public int Unknown24;
-        public int Unknown25;
-        public int Unknown26;
-        public int Unknown27;
-        public int Unknown28;
-        public int Unknown29;
-        public int Unknown30;
-        public int Unknown31;
-        public int Unknown32;
-        public int Unknown33;
-        
-        public int CastingPercent;
-        public int ObjectID;
-
-        public int Unknown36;
-        public int Unknown37;
+        /* 00 */ public int Level;
+        /* 01 */ public int ClassJobIcon;
+        /* 02 */ public int Unknown2;
+        /* 03 */ public int Unknown3;
+        /* 04 */ public int HP;
+        /* 05 */ public int HPMax;
+        /* 06 */ public int ShieldPercentage;
+        /* 07 */ public int MP;
+        /* 08 */ public int MPMax;
+        /* 09 */ public int Unknown9;
+        /* 10 */ public int Unknown10;
+        /* 11 */ public int PartySlot;
+        /* 12 */ public int Unknown12;
+        /* 13 */ public int Unknown13;
+        /* 14 */ public int StatusEffectCount;
+        /* 15-24 */ public AddonPartyListMemberStatusEffectsIntArray StatusEffect;
+        /* 25 */ public int Unknown25;
+        /* 26 */ public int Unknown26;
+        /* 27 */ public int Unknown27;
+        /* 28 */ public int Unknown28;
+        /* 29 */ public int Unknown29;
+        /* 30 */ public int Unknown30;
+        /* 31 */ public int Unknown31;
+        /* 32 */ public int Unknown32;
+        /* 33 */ public int Unknown33;
+        /* 34 */ public int Unknown34;
+        /* 35 */ public int CastingPercent;
+        /* 36 */ public int CastingActionId;
+        /* 37 */ public int CastingTargetIndex;
+        /* 38 */ public int ObjectId;
+        /* 39 */ public int Unknown39;
+        /* 40 */ public int Unknown40;
+        /* 41 */ public int Unknown41;
     }
 
     [StructLayout(LayoutKind.Sequential, Size = 4 * 10)]
